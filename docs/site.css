@@ -573,10 +573,10 @@ h2 {
 .lobster-icon {
   position: relative;
   z-index: 1;
-  width: min(210px, 62%);
+  display: block;
+  width: min(280px, 78%);
   height: auto;
-  color: var(--green);
-  filter: drop-shadow(0 0 24px rgba(85, 209, 135, 0.34));
+  filter: drop-shadow(0 0 24px rgba(255, 107, 107, 0.22));
 }
 
 .teaser-label {
