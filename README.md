@@ -120,6 +120,16 @@ BLE keyboard connection remains unresolved on the factory C6 image. The B1
 failure occurs before authentication with controller reason `0x3e` / GATT open
 status `133`. Do not claim B1 success or update the C6 firmware as a workaround.
 
+## Contributors
+
+The project recognises the following AI collaborators:
+
+- **ChatGPT 6.1 Sol**
+- **Gemini 4 Argon**
+- **DeepSeek V4.1 Flash**
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the contributor acknowledgement.
+
 ## Credits and upstream projects
 
 ### PixelFonts
