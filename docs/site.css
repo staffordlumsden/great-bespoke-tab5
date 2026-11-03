@@ -609,6 +609,73 @@ h2 {
   font-weight: normal;
 }
 
+.m5stack-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: inset 4px 0 var(--amber);
+}
+
+.m5stack-copy h3 {
+  margin: 0 0 12px;
+  font-family: "PixelTitle", monospace;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: normal;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.m5stack-copy p:not(.section-kicker) {
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+
+.m5stack-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.m5stack-links .button {
+  min-height: 42px;
+  padding: 0 13px;
+  font-size: 12px;
+}
+
+.m5stack-video {
+  margin: 0;
+  padding: 10px;
+  background: #05080c;
+  border: 1px solid var(--line);
+}
+
+.video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.m5stack-video figcaption {
+  margin: 9px 4px 0;
+  color: var(--dim);
+  font-size: 12px;
+}
+
 .partition-map {
   margin-top: 14px;
   padding: 18px;
@@ -745,6 +812,7 @@ footer {
   .console-features,
   .app-grid,
   .hardware-grid,
+  .m5stack-panel,
   .section-head {
     grid-template-columns: 1fr;
   }
