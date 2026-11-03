@@ -1,0 +1,6 @@
+{
+  "host": "terminal-host.example.net",
+  "port": 22,
+  "username": "replace-with-username",
+  "password": "replace-with-password"
+}

@@ -1,0 +1,11 @@
+/artifacts/
+/private/
+/tab5-ai-usage.json
+/tab5-ollama-analytics.json
+/config.local.json
+**/build*/
+**/managed_components/
+**/sdkconfig.old
+**/__pycache__/
+.DS_Store
+._*

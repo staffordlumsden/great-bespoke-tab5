@@ -1,0 +1,151 @@
+name: Deploy GitHub Pages
+
+# Stages docs/ + every published release's firmware ZIP into a single static
+# site. Refreshed on doc edits, on each release publish, and on demand.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/pages.yml'
+  # `release: published` does NOT fire when the release is created by
+  # release.yml, because GitHub suppresses events triggered via
+  # GITHUB_TOKEN to prevent recursive workflow runs. Chain off the
+  # release workflow's completion instead; the release trigger stays
+  # for releases published by hand through the web UI.
+  workflow_run:
+    workflows: ["Build and Release Firmware"]
+    types: [completed]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage docs/ into _site/
+        run: |
+          mkdir -p _site
+          cp -a docs/. _site/
+
+      - name: Stage release firmware ZIPs into _site/firmware/<tag>/
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p _site/firmware
+          tags_json=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 100 \
+                        --json tagName,isDraft,isPrerelease,publishedAt)
+          mapfile -t tags < <(echo "$tags_json" | jq -r '.[] | select(.isDraft|not) | .tagName')
+
+          # Per-tag NDJSON record. Each release publishes one
+          # firmware-<tag>.zip asset (single-board project, no per-board
+          # matrix). We stage it under firmware/<tag>/ and record it in
+          # versions.json so the web flasher can find it.
+          : > /tmp/per_tag.ndjson
+          # Track the most recent non-prerelease tag for _site/latest.json.
+          # gh release list returns newest first, so first hit wins.
+          latest_stable_tag=""
+          for tag in "${tags[@]}"; do
+            asset=$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets \
+                     --jq '.assets[] | select(.name|test("^firmware-.*\\.zip$")) | .name' \
+                     | head -1)
+            if [ -z "$asset" ]; then
+              echo "[skip] $tag: no firmware ZIP asset"
+              continue
+            fi
+            dest="_site/firmware/$tag"
+            mkdir -p "$dest"
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" -p "$asset" -D "$dest" --clobber
+            echo "[ok] $tag -> $dest/$asset"
+            echo "{\"tag\":\"$tag\",\"zip\":\"$asset\"}" >> /tmp/per_tag.ndjson
+
+            # OTA staging: prefer the raw asset (release.yml >= v0.3 uploads
+            # <app>.bin + latest.json), and fall back to unzipping the
+            # firmware ZIP for older tags.
+            #
+            # The IDF project was renamed tab5_claude_client ->
+            # portable_terminal, so the app binary is named
+            # portable_terminal.bin from that rename onward and
+            # tab5_claude_client.bin for tags published before it (v0.1.0).
+            # This loop runs over ALL past releases, so both names must be
+            # handled: try the new name first, then the legacy one.
+            if gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+                 -p "portable_terminal.bin" -p "tab5_claude_client.bin" \
+                 -p "latest.json" \
+                 -D "$dest" --clobber 2>/dev/null; then
+              echo "[ok] $tag: staged raw app + latest.json"
+            else
+              echo "[info] $tag: no raw OTA assets — unzipping ZIP"
+              (cd "$dest" && unzip -o "$asset" portable_terminal.bin >/dev/null 2>&1 \
+                 || unzip -o "$asset" tab5_claude_client.bin >/dev/null 2>&1 || true)
+            fi
+
+            # Resolve whichever app-binary name landed in $dest.
+            app_bin=""
+            for cand in portable_terminal.bin tab5_claude_client.bin; do
+              if [ -f "$dest/$cand" ]; then app_bin="$cand"; break; fi
+            done
+
+            # Older tags have no latest.json in the release; synthesize one
+            # so the file exists at the tag URL for pinning.
+            if [ ! -f "$dest/latest.json" ] && [ -n "$app_bin" ]; then
+              SHA=$(sha256sum "$dest/$app_bin" | cut -d' ' -f1)
+              SIZE=$(stat -c%s "$dest/$app_bin")
+              # project_name mirrors the binary name so a synthesized
+              # manifest for a legacy tag stays self-consistent.
+              PROJECT_NAME="${app_bin%.bin}"
+              PAGES_BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY##*/}"
+              cat > "$dest/latest.json" <<EOF
+          {"tag":"$tag","url":"$PAGES_BASE/firmware/$tag/$app_bin","sha256":"$SHA","size":$SIZE,"project_name":"$PROJECT_NAME","chip_id":"esp32p4"}
+          EOF
+            fi
+
+            # First non-prerelease tag wins for _site/latest.json.
+            if [ -z "$latest_stable_tag" ]; then
+              is_pre=$(echo "$tags_json" | jq -r --arg t "$tag" '.[] | select(.tagName==$t) | .isPrerelease')
+              if [ "$is_pre" != "true" ] && [ -f "$dest/latest.json" ]; then
+                cp "$dest/latest.json" _site/latest.json
+                latest_stable_tag="$tag"
+                echo "[ok] $tag -> _site/latest.json"
+              fi
+            fi
+          done
+
+          # versions.json: ordered list of {tag, zip}. The web flasher
+          # fetches this and presents the tag selector.
+          jq -s '.' < /tmp/per_tag.ndjson > _site/versions.json
+          echo "--- versions.json ---"
+          cat _site/versions.json
+          echo "--- _site/latest.json ---"
+          [ -f _site/latest.json ] && cat _site/latest.json || echo "(none)"
+          echo "--- _site/firmware ---"
+          find _site/firmware -maxdepth 2 -type f | sort
+
+      - uses: actions/configure-pages@v5
+        with:
+          # Auto-enable GitHub Pages with the "GitHub Actions" source on
+          # first run. Without this the action returns 404 ("Get Pages
+          # site failed") unless someone manually enables Pages in
+          # Settings → Pages first.
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

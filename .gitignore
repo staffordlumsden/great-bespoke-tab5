@@ -1,0 +1,46 @@
+# Host SDK/toolchain and configuration: retain only the portable entry points.
+/.tools/*
+!/.tools/export.sh
+!/.tools/export.local.sh.example
+
+# Device dumps may contain Wi-Fi credentials and Bluetooth bond keys.
+/backups/
+/logs/
+/reference/
+**/artifacts/
+
+# Rebuild using the checked-in sdkconfig and dependencies.lock files.
+**/build/
+**/build-*/
+**/build_*/
+**/managed_components/
+**/graphify-out/
+**/sdkconfig.old
+**/sdkconfig.pre-*
+*.bin
+*.elf
+*.map
+*.tgz
+*.tar.gz
+*.zip
+
+# Credentials and machine metadata.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.DS_Store
+._*
+__pycache__/
+*.py[cod]
+
+# Private build-time PIN (copy from the .example template)
+projects/tab5-console/main/tab5_lock_pin_private.h
+
+# Public-release scan reports and local caches.
+.cache/
+.gitleaks-report.*
+*.dSYM/

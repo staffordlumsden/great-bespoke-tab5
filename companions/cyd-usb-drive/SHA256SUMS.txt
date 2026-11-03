@@ -1,0 +1,2 @@
+51e188631d22b90c53c01f8df9f697c2cdf64ba1cbe3af9f7e13fdc56e5e9f4a  CYD-USBDrive-0.1.2-SD-Package.zip
+3d1d624fbb20f7efb4b7f3eb14469cf151d1e7f7c0f9f6e069969d17613dc082  CYD-USBDrive-Mac-Bridge-universal.zip

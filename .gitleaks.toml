@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Vendored libssh2 source contains cryptographic protocol constants, not credentials."
+paths = ['''projects/tab5-terminal/firmware/components/libssh2_esp/.*''']

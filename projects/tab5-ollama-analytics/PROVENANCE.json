@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-27",
+  "description": "Ollama-only derivative of the CYD parser and shared Tab5 bootstrap; renamed to TAB5 Ollama Analytics 0.1.1.",
+  "copied_files": [
+    {
+      "path": "firmware/main/cyd_usage/usage_model.h",
+      "source": "Great Bespoke CYD/projects/usage/firmware/main/usage_model.h",
+      "source_sha256": "e8f848ed9fb739193846ccae8154d80abe8ae9bb9e1c6f070473a70ccd2a25fd",
+      "sha256": "80468c8ab0d901ae05e2848d64f0df3227ce2a9ba06c8e937a55ecd8fa3f7495",
+      "changes": "Unused multi-provider structures and feed/OpenRouter parsing removed; Ollama parsing unchanged."
+    },
+    {
+      "path": "firmware/main/cyd_usage/usage_model.cpp",
+      "source": "Great Bespoke CYD/projects/usage/firmware/main/usage_model.cpp",
+      "source_sha256": "7fe4601fdb30c7823e54e34ed8c4c4f9729bf396a3a10e5bb0d07056ae0ef283",
+      "sha256": "d0a5d57bf9f06c1e7340a7135621df59e1aee54344a628d978e384dd45f63f23",
+      "changes": "Unused multi-provider structures and feed/OpenRouter parsing removed; Ollama parsing unchanged."
+    },
+    {
+      "path": "firmware/main/cyd_usage/json_guard.h",
+      "source": "Great Bespoke CYD/projects/usage/firmware/main/json_guard.h",
+      "sha256": "7a46fa83a9a89a7a869880ed6c733c2d4b6b338a57506d994ab93ec1528246a3"
+    },
+    {
+      "path": "firmware/sdkconfig",
+      "source": "projects/tab5-weather/firmware/sdkconfig",
+      "sha256": "7d08762110f6bfed8a830dc8312edb19d56662789e6b13741cb0907712a82086"
+    },
+    {
+      "path": "firmware/sdkconfig.defaults",
+      "source": "projects/tab5-weather/firmware/sdkconfig.defaults",
+      "sha256": "c627418d8981f1f7bdaaa9f72f35b830d58b59dae1da46705f392e6d9dc8c423"
+    },
+    {
+      "path": "firmware/dependencies.lock",
+      "source": "projects/tab5-weather/firmware/dependencies.lock",
+      "sha256": "e15efb03b151acffcd2a588ec8c7b178e70535737d9f7bac770a51e96c5f1d6c"
+    },
+    {
+      "path": "firmware/partitions.csv",
+      "source": "projects/tab5-weather/firmware/partitions.csv",
+      "sha256": "22d2c519be25c1eb6f17f9381ade31905674506de472c2d964e1625b7dd15c08"
+    },
+    {
+      "path": "firmware/main/idf_component.yml",
+      "source": "projects/tab5-weather/firmware/main/idf_component.yml",
+      "sha256": "8e61c5c349c1248de8bca0f0394a44c66a2596eb9cbc0d5fe84aeeb04a153a1b"
+    },
+    {
+      "path": "tools/package_sd_app.py",
+      "source": "projects/tab5-weather/tools/package_sd_app.py",
+      "sha256": "456ec8b0a6a8de391917285c2dbff6870859ef04366a2007df87494197c1fe14"
+    },
+    {
+      "path": "tests/third_party/cjson/cJSON.c",
+      "source": "projects/tab5-weather/tests/third_party/cjson/cJSON.c",
+      "sha256": "607e756460fa0de37d20a7a9181f2de29c97bfb7ce5a0e6c2f548243836cd852"
+    },
+    {
+      "path": "tests/third_party/cjson/cJSON.h",
+      "source": "projects/tab5-weather/tests/third_party/cjson/cJSON.h",
+      "sha256": "d9c41617543b7ade8d5e7b8f66f82b00fa70e4063c396f2d628849efce3ef109"
+    },
+    {
+      "path": "tests/third_party/cjson/LICENSE",
+      "source": "projects/tab5-weather/tests/third_party/cjson/LICENSE",
+      "sha256": "732884bb2b5adf43f599a580e8ad9a613b471b7c5c33b7c93488589588506fe1"
+    },
+    {
+      "path": "PixelFonts-LICENSE.txt",
+      "source": "projects/tab5-console/third_party/PixelFonts/LICENSE",
+      "sha256": "f1c026999a25f97372342bed6a72fce3f9b0974e37f16d49d08bba68f89905a9"
+    },
+    {
+      "path": "Apache-2.0-LICENSE.txt",
+      "source": "third_party/licenses/Apache-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "tests/fakes/esp_http_client.h",
+      "source": "projects/tab5-weather/tests/fakes/esp_http_client.h",
+      "sha256": "e78441ab4b1c9c6c4077a456ff86f943ac957e841b4f622e7eac445fc047af50"
+    },
+    {
+      "path": "tests/fakes/esp_crt_bundle.h",
+      "source": "projects/tab5-weather/tests/fakes/esp_crt_bundle.h",
+      "sha256": "0fbf6edabcf78e5276ed46b41c6b4add8ed557b24bb9aef5385d359f390ac6a2"
+    },
+    {
+      "path": "tests/fakes/esp_timer.h",
+      "source": "projects/tab5-weather/tests/fakes/esp_timer.h",
+      "sha256": "f8cdb80a5667a12bfe8a1be27ce97e4c1ff297c1eba4219668150cb2a6c000c6"
+    }
+  ]
+}

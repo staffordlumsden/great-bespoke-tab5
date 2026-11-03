@@ -1,0 +1,42 @@
+{
+  "project": "Tab5Terminal",
+  "version": "0.1.4",
+  "upstream": {
+    "repository": "https://github.com/ciniml/portable_terminal",
+    "fork": "https://github.com/staffordlumsden/portable_terminal",
+    "commit": "44a616ee333242e0fd3181d5771ead55ded58253",
+    "license": "BSL-1.0",
+    "snapshot": "upstream/",
+    "derived_component": "firmware/components/term_core",
+    "derived_changes": "bounded primary-screen scrollback and DEC G0/G1 Special Graphics translation for the Tab5 port; upstream snapshot remains unmodified"
+  },
+  "target": {
+    "soc": "ESP32-P4",
+    "revision": "v1.3",
+    "display": "ST7121",
+    "orientation": "landscape-0",
+    "flash_bytes": 16777216,
+    "psram_bytes": 33554432
+  },
+  "toolchain": {
+    "esp_idf": "5.5.5",
+    "m5stack_tab5": "1.3.2",
+    "esp_hosted": "1.4.0",
+    "esp_wifi_remote": "0.8.5"
+  },
+  "input": {
+    "primary": "M5Stack Tab5 Keyboard over I2C 0x6D",
+    "fallback": "USB-A HID boot keyboard"
+  },
+  "terminal_font": {
+    "family": "Tab5 Terminal Mono",
+    "source_family": "Source Code Pro",
+    "upstream": "https://github.com/adobe-fonts/source-code-pro",
+    "commit": "803b7e23ec97ae58b6232ea76519a76d428ba268",
+    "license": "OFL-1.1",
+    "regular_sha256": "74bd80d3e42a08517cd7e1108ba3d86f2da29ac0f3065be95e0357956ab9db37",
+    "bold_sha256": "b2095e0d657e6d28dc32444a9dacabab0c9241d0bf39d96371756cc9bdbc3a5f"
+  },
+  "c6_policy": "read version only; no erase, write, OTA or updater",
+  "deployment": "resident Console SD installer only"
+}

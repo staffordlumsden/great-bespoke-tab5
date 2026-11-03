@@ -1,0 +1,4 @@
+/artifacts/
+**/build/
+**/build-*/
+**/managed_components/

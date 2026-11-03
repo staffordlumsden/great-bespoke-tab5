@@ -1,0 +1,2 @@
+# Keep upstream licence text byte-for-byte, including its trailing blank lines.
+projects/usb-drive/host/third_party/*-LICENSE -whitespace

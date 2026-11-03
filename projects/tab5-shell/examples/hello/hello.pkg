@@ -1,0 +1,5 @@
+TAB5SHELL-PKG-1
+name hello
+version 1.0.0
+entry hello.lua
+sha256 c18b43c2576f2ac50d11003470a891349285e768d3cadd52ccdf4d9886e94c0d

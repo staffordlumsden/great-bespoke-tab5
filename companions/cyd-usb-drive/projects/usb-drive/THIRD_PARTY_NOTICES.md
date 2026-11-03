@@ -1,0 +1,3 @@
+# USB Drive third-party notices
+
+USB Drive uses the Great Bespoke CYD shared components and the pinned PixelFonts atlas. PixelFonts is Copyright (c) mcer12 and distributed under the MIT License; see the repository's `projects/launcher/third_party/PixelFonts/LICENSE`. Firmware builds use ESP-IDF and its bundled components under their respective upstream licences. The host bridge uses `golang.org/x/net/webdav`, `golang.org/x/sys`, and `go.bug.st/serial`; their BSD-style licence texts are retained under `host/third_party/`. These notices do not change the licence of original Great Bespoke CYD source.

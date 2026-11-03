@@ -1,0 +1,24 @@
+Tab5HtmlViewer 0.1.1 — Third-Party & Component Notices
+======================================================
+
+1. Tab5HtmlViewer Application Source & HTML/CSS Layout Engine
+   Copyright (c) 2026 Great Bespoke Tab5 Contributors.
+   SPDX-License-Identifier: MIT
+
+2. PixelFonts (UI Chrome Typography)
+   Copyright (c) mcer12 (https://github.com/mcer12/PixelFonts)
+   SPDX-License-Identifier: MIT
+
+3. Embedded Document Fonts
+   Source Sans 3, Source Serif 4 and Source Code Pro.
+   Copyright (c) Adobe and contributors.
+   Licensed under the SIL Open Font License, Version 1.1 (OFL-1.1).
+   The complete license and pinned source provenance are retained under
+   third_party/fonts/.
+
+4. stb_truetype.h (TrueType Outline Rasterizer)
+   Authored by Sean Barrett / RAD Game Tools (Public Domain / MIT).
+
+5. ESP-IDF v5.5.5 & Espressif Managed Components
+   Copyright (c) Espressif Systems (Shanghai) Co., Ltd.
+   Licensed under the Apache License, Version 2.0 (Apache-2.0).

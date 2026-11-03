@@ -1,0 +1,28 @@
+#pragma once
+
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+
+namespace tab5 {
+
+struct Tab5KbdConfig {
+    int      sda_gpio   = 0;
+    int      scl_gpio   = 1;
+    int      int_gpio   = 50;
+    uint32_t i2c_hz     = 400000;
+    int      task_stack = 4096;
+};
+
+using KeyboardSink = std::function<void(const uint8_t* data, size_t length)>;
+using KeyboardFilter = std::function<bool(uint8_t hid_usage, uint8_t modifiers)>;
+
+// Bring up I2C master bus on the clip-on keyboard ExtPort1 pins (addr 0x6D),
+// configure HID mode, and start task that drains events into `sink`.
+bool start_tab5_kbd_input(KeyboardSink sink, const Tab5KbdConfig& cfg = {},
+                          KeyboardFilter filter = {});
+
+// True after the accessory answered the firmware version handshake.
+bool tab5_kbd_connected();
+
+}  // namespace tab5

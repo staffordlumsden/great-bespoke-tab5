@@ -1,0 +1,10 @@
+/artifacts/
+/private/
+/tab5-terminal.json
+**/build*/
+**/managed_components/
+**/sdkconfig.old
+**/__pycache__/
+upstream/graphify-out/
+.DS_Store
+._*

@@ -1,0 +1,7 @@
+{
+  "host": "terminal-host.example.net",
+  "port": 22,
+  "username": "replace-with-username",
+  "private_key_file": "/private/tab5-terminal-id_rsa",
+  "private_key_passphrase": ""
+}

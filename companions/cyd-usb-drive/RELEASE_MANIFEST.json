@@ -1,0 +1,137 @@
+{
+  "release_tag": "cyd-usb-drive-0.1.2",
+  "published_date": "2026-10-27",
+  "firmware": {
+    "project": "USBDrive",
+    "version": "0.1.2",
+    "size_bytes": 333552,
+    "sha256": "fe247890e6ad24d4c1be3c3050c411d3ac37fb9b1156cbadc0e415d817754e42",
+    "chip": "esp32",
+    "slot_size": 1769472
+  },
+  "mac_bridge": {
+    "architectures": [
+      "arm64",
+      "x86_64"
+    ],
+    "bundle_version": "0.1.0",
+    "executable_sha256": "948119ba21478636cab138aa59133031bd7315b624d798948661be47be1d1815",
+    "signature": "existing ad-hoc signature verified",
+    "origin": "existing Desktop app; Mach-O section payloads match the original build artifact"
+  },
+  "checks": {
+    "source_payloads_byte_matched": true,
+    "native_asan_ubsan_tests": "PASS",
+    "go_host_tests": "PASS",
+    "firmware_image_checksum_and_app_description": "PASS",
+    "mac_bundle_codesign_verify_deep_strict": "PASS",
+    "selected_payload_secret_pattern_scan": "no findings",
+    "new_physical_device_test": "not performed"
+  },
+  "assets": [
+    {
+      "name": "CYD-USBDrive-0.1.2-SD-Package.zip",
+      "size_bytes": 210061,
+      "sha256": "51e188631d22b90c53c01f8df9f697c2cdf64ba1cbe3af9f7e13fdc56e5e9f4a",
+      "members": [
+        {
+          "path": "README.txt",
+          "size_bytes": 832,
+          "sha256": "761a5b83a249373fc4c2b70075fa0e6abca8fd87a39e8911dba21090213eb584",
+          "mode": "0o644"
+        },
+        {
+          "path": "USBDrive-0.1.2-LICENSE.txt",
+          "size_bytes": 605,
+          "sha256": "f8b6d68313188190ebde66bdc4c1df82e597b74b3a89ccd3a93feae1d65c5597",
+          "mode": "0o755"
+        },
+        {
+          "path": "USBDrive-0.1.2.bin",
+          "size_bytes": 333552,
+          "sha256": "fe247890e6ad24d4c1be3c3050c411d3ac37fb9b1156cbadc0e415d817754e42",
+          "mode": "0o755"
+        },
+        {
+          "path": "USBDrive-0.1.2.json",
+          "size_bytes": 230,
+          "sha256": "9b88f26b0fd0e794985e8c6bc7b7dd698ad884d42cac799962ebca7bf43d705c",
+          "mode": "0o755"
+        },
+        {
+          "path": "licenses/ESP-IDF-Apache-2.0.txt",
+          "size_bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "mode": "0o644"
+        },
+        {
+          "path": "licenses/PixelFonts-MIT.txt",
+          "size_bytes": 1063,
+          "sha256": "f1c026999a25f97372342bed6a72fce3f9b0974e37f16d49d08bba68f89905a9",
+          "mode": "0o755"
+        }
+      ]
+    },
+    {
+      "name": "CYD-USBDrive-Mac-Bridge-universal.zip",
+      "size_bytes": 6048522,
+      "sha256": "3d1d624fbb20f7efb4b7f3eb14469cf151d1e7f7c0f9f6e069969d17613dc082",
+      "members": [
+        {
+          "path": "Mount CYD Drive.app/Contents/Info.plist",
+          "size_bytes": 732,
+          "sha256": "c0b5c7f6903568af74aef86025bc2dba7e4f1bbb0dcccfb00e97c39bf81f0293",
+          "mode": "0o755"
+        },
+        {
+          "path": "Mount CYD Drive.app/Contents/MacOS/Mount CYD Drive",
+          "size_bytes": 14429920,
+          "sha256": "948119ba21478636cab138aa59133031bd7315b624d798948661be47be1d1815",
+          "mode": "0o755"
+        },
+        {
+          "path": "Mount CYD Drive.app/Contents/Resources/USBDrive.icns",
+          "size_bytes": 62240,
+          "sha256": "ef58d57bbe7a790914876ab32e704e2004c6d84edd980ecb2b05f4a98bba2374",
+          "mode": "0o755"
+        },
+        {
+          "path": "Mount CYD Drive.app/Contents/_CodeSignature/CodeResources",
+          "size_bytes": 2448,
+          "sha256": "688ded6df81e652fd9c16a26552cb95dba5d29e687a39df15ed173af01d36b3e",
+          "mode": "0o644"
+        },
+        {
+          "path": "README.txt",
+          "size_bytes": 909,
+          "sha256": "27725d77378bdbd078f651dffb18f341de8e20d8e50490a0c3291b31f21d5bea",
+          "mode": "0o644"
+        },
+        {
+          "path": "licenses/creack-goselect-LICENSE",
+          "size_bytes": 1088,
+          "sha256": "c844a90215df09623d43e9aaddcbf4bee8a3f095e838685d1fa59b015bf95e7a",
+          "mode": "0o644"
+        },
+        {
+          "path": "licenses/go-bug-st-serial-LICENSE",
+          "size_bytes": 1512,
+          "sha256": "9c775dae0c8089a7aa186af1eff98237933ee3edc3b949874beb72bfe08895a8",
+          "mode": "0o755"
+        },
+        {
+          "path": "licenses/golang-x-net-LICENSE",
+          "size_bytes": 1479,
+          "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067",
+          "mode": "0o755"
+        },
+        {
+          "path": "licenses/golang-x-sys-LICENSE",
+          "size_bytes": 1453,
+          "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad",
+          "mode": "0o755"
+        }
+      ]
+    }
+  ]
+}

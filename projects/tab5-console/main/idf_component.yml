@@ -1,0 +1,18 @@
+## IDF Component Manager Manifest
+## The m5stack_tab5 BSP provides the board-level display/touch/IO definitions
+## for the M5Stack Tab5 (ESP32-P4 + ESP32-C6).  It requires network access to
+## resolve from the Espressif Component Registry on first build.
+dependencies:
+  espressif/m5stack_tab5:
+    version: "^1.3.2"
+    public: true
+  espressif/usb_host_hid:
+    version: "^1.0.4"
+  # Keep these pinned to the ESP-Hosted protocol generation bundled with the
+  # factory Tab5 C6 firmware. Do not let the manager select a newer major.
+  espressif/esp_hosted:
+    version: "1.4.0"
+    public: true
+  espressif/esp_wifi_remote:
+    version: "0.8.5"
+    public: true

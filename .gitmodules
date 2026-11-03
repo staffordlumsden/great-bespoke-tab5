@@ -1,0 +1,4 @@
+[submodule "projects/tab5-media-player"]
+	path = projects/tab5-media-player
+	url = https://github.com/staffordlumsden/Tab5-Media-Player.git
+	branch = main

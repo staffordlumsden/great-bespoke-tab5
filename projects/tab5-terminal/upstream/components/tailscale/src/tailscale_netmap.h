@@ -1,0 +1,104 @@
+/*
+ * Tailscale network map — MapResponse JSON parser and WireGuard peer manager.
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+#pragma once
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "esp_err.h"
+#include "tailscale_derp.h"
+
+/**
+ * @brief Apply a JSON MapResponse string to the WireGuard data plane.
+ *
+ * Parses the MapResponse received from the Tailscale control server and
+ * synchronises the WireGuard peer table:
+ *   - Adds peers that are new in this map.
+ *   - Removes peers that are no longer present.
+ *   - Updates endpoints of existing peers when they change.
+ *
+ * Also stores the DERPMap into the DERP client for relay selection.
+ *
+ * @param json_str  NULL-terminated JSON string (MapResponse).
+ * @param json_len  Length of json_str (excluding NUL).
+ * @return ESP_OK on success; ESP_ERR_INVALID_ARG if the JSON is malformed.
+ */
+esp_err_t ts_netmap_apply(const char *json_str, size_t json_len);
+
+/**
+ * @brief Retrieve the DERP home server node selected from the last DERPMap.
+ *
+ * @param node_out  Output: filled with the best DERP node on success.
+ * @return true if a DERP home has been set, false otherwise.
+ */
+bool ts_netmap_get_derp_home(ts_derp_node_t *node_out);
+
+/**
+ * @brief Return the Tailscale IP address of this node.
+ *
+ * Valid only after at least one successful ts_netmap_apply() call that
+ * contained a "Node" field with an "Addresses" entry.
+ *
+ * @param ip_str    Buffer to receive the IP string (e.g. "100.x.y.z").
+ * @param ip_str_len  Buffer length; 20 bytes is sufficient.
+ */
+void ts_netmap_get_self_ip(char *ip_str, size_t ip_str_len);
+
+/**
+ * @brief Look up the Tailscale IP of a peer by name.
+ *
+ * Matches the supplied name against each peer's Tailscale Name and the
+ * short form before the first '.', so users can type either "host" or
+ * "host.tail-xxxxx.ts.net". Case-insensitive.
+ *
+ * @param name        Hostname to resolve.
+ * @param ip_str      Destination buffer for the dotted-quad IPv4 string.
+ * @param ip_str_len  Capacity of ip_str (>= 16 recommended).
+ * @return true on hit, false on miss.
+ */
+bool ts_netmap_resolve(const char *name, char *ip_str, size_t ip_str_len);
+
+/**
+ * @brief Look up a DERP region's node descriptor by region ID.
+ *
+ * The full DERPMap region table is captured on each MapResponse so the
+ * DERP client can open a connection to any peer's home region.
+ *
+ * @param region_id  Tailscale DERP region ID (> 0).
+ * @param out        Filled with the region's node on success.
+ * @return true if the region is known, false otherwise.
+ */
+bool ts_netmap_get_derp_region(int region_id, ts_derp_node_t *out);
+
+/**
+ * @brief Look up a peer by its DISCO public key.
+ *
+ * Used by the CallMeMaybe handler to resolve a sender's identity to the
+ * WireGuard peer slot we should target with follow-up DISCO Pings.
+ *
+ * @param disco_pub      32-byte DISCO Curve25519 public key to match.
+ * @param wg_idx_out     On hit, receives the WG peer index.
+ * @param node_pub_out   On hit, receives the peer's 32-byte NodeKey.
+ * @return true on hit, false on miss.
+ */
+bool ts_netmap_lookup_by_disco(const uint8_t disco_pub[32],
+                                uint8_t *wg_idx_out,
+                                uint8_t  node_pub_out[32]);
+
+/**
+ * @brief Look up a peer by its WG peer index.
+ *
+ * Reverse of ts_netmap_lookup_by_disco. Used by DISCO's periodic
+ * re-verify sweep to build a heartbeat Ping for a verified peer
+ * (needs the peer's NodeKey + DISCO Curve25519 pubkey to seal the
+ * DISCO frame, but only had the wg_index in the s_verified slot).
+ *
+ * @param wg_idx         WG peer index.
+ * @param node_pub_out   On hit, receives the peer's 32-byte NodeKey.
+ * @param disco_pub_out  On hit, receives the peer's 32-byte DISCO key.
+ * @return true on hit, false on miss.
+ */
+bool ts_netmap_get_peer_by_wg_idx(uint8_t wg_idx,
+                                   uint8_t node_pub_out[32],
+                                   uint8_t disco_pub_out[32]);

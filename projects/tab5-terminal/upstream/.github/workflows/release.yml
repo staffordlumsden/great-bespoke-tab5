@@ -1,0 +1,315 @@
+name: Build and Release Firmware
+
+# Tag-driven release: push `vX.Y.Z` to build the firmware in the official
+# ESP-IDF container and attach the artifacts to a GitHub Release.
+# `workflow_dispatch` is also supported for smoke-testing the CI without
+# cutting a tag.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# softprops/action-gh-release needs to create a Release on the repo. Default
+# token scopes are tight under modern GitHub orgs / repo settings, so grant
+# `contents: write` here explicitly rather than relying on
+# Settings → Actions → Workflow permissions.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build firmware (esp32p4)
+    runs-on: ubuntu-latest
+    # No `container:` — ESP-IDF is checked out at a pinned commit below.
+    # Neither published image works for this project:
+    #
+    #   * release-v6.0 (v6.0.2) ships mbedTLS 4 / TF-PSA-Crypto, which
+    #     made the low-level crypto headers private (mbedtls/rsa.h,
+    #     bignum.h, cipher.h, ecdh.h, ecdsa.h, entropy.h, ctr_drbg.h).
+    #     libssh2 1.11.1's mbedTLS backend includes them directly, so
+    #     the SSH stack cannot build until libssh2 gains PSA support.
+    #   * The v6.0-beta1 tag predates a rom_gpio_matrix_out rename that
+    #     M5GFX's Bus_SPI.cpp depends on.
+    #
+    # IDF_PIN below is the master snapshot the project is developed
+    # against, where both build. Bump it (and the local checkout) in
+    # lockstep.
+    env:
+      IDF_PIN: 6534932340b7140dfec19a9f24248fa9568c61d0
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0  # full history so `git describe --tags` resolves
+
+      - name: Verify git version information
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "=== Git Information ==="
+          git describe --tags --abbrev=0 || echo "(no tags found)"
+          git rev-parse --short HEAD
+          echo "Current ref: ${GITHUB_REF}"
+
+      - name: Cache ESP-IDF + tools
+        id: idf-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/esp-idf
+            ~/.espressif
+          key: idf-${{ env.IDF_PIN }}-esp32p4
+
+      - name: Install ESP-IDF at the pinned commit
+        if: steps.idf-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            git wget flex bison gperf python3 python3-pip python3-venv \
+            cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+          git clone https://github.com/espressif/esp-idf.git ~/esp-idf
+          cd ~/esp-idf
+          git checkout "$IDF_PIN"
+          git submodule update --init --recursive --depth 1
+          ./install.sh esp32p4
+
+      - name: ccache (compiler cache)
+        # restore-keys lets a fresh tag pick up the most recent main-branch
+        # cache on cold start, keeping the per-tag warm rebuild < 1 minute.
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: idf-v6.0-esp32p4-${{ github.ref_name }}
+          restore-keys: |
+            idf-v6.0-esp32p4-
+          max-size: 500M
+          variant: ccache
+          # Tell ESP-IDF's cmake module to actually invoke ccache. Without
+          # this env var ESP-IDF skips its compiler-launcher hook even if
+          # ccache is on PATH.
+          create-symlink: true
+
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION="dev-${GITHUB_SHA::8}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+          BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "build_date=$BUILD_DATE" >> "$GITHUB_OUTPUT"
+          echo "Build date: $BUILD_DATE"
+
+      - name: Pin PROJECT_VER for the build
+        # ESP-IDF resolves PROJECT_VER from (in order) version.txt at the
+        # project root, then project(VERSION ...) in CMakeLists.txt, then
+        # `git describe --tags --dirty`. Writing version.txt makes the
+        # stamped esp_app_desc deterministic in CI builds.
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          echo "$VERSION" > version.txt
+          echo "version.txt contents: $(cat version.txt)"
+
+      - name: Build firmware
+        shell: bash
+        env:
+          CI: true
+          VERSION: ${{ steps.version.outputs.version }}
+          IDF_CCACHE_ENABLE: "1"
+        run: |
+          set -euo pipefail
+          . "$HOME/esp-idf/export.sh"
+          echo "=== ccache config ==="
+          ccache --version | head -1
+          ccache --show-config | grep -E "max_size|cache_dir|compiler_check" || true
+          echo "=== Setting target esp32p4 ==="
+          make set-target
+          echo "=== Building ==="
+          make build
+          echo "=== ccache stats ==="
+          ccache --show-stats || true
+
+      - name: Pack single-file firmware
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          python3 script/pack_firmware.py \
+            --build-dir build \
+            --out "firmware-${VERSION}.bin"
+          ls -lh "firmware-${VERSION}.bin"
+
+      - name: Stage release artifacts
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          outdir="release"
+          mkdir -p "$outdir"
+          cp build/bootloader/bootloader.bin           "$outdir/"
+          cp build/partition_table/partition-table.bin "$outdir/"
+          cp build/ota_data_initial.bin                "$outdir/"
+          cp build/portable_terminal.bin              "$outdir/"
+          cp build/flash_args                          "$outdir/"
+          cp "firmware-${VERSION}.bin"                 "$outdir/"
+          cp README.md                                 "$outdir/" 2>/dev/null || true
+          cp LICENSE                                   "$outdir/" 2>/dev/null || true
+          echo "=== Firmware size ==="
+          python3 -m esp_idf_size build/portable_terminal.map --format=text || true
+          (cd "$outdir" && zip -r "../firmware-${VERSION}.zip" .)
+          ls -lh "firmware-${VERSION}.zip"
+
+      - name: Emit OTA manifest (latest.json)
+        # Emit a per-release latest.json that the on-device OTA client
+        # (main/ota_task.cpp) can poll. The pages.yml workflow copies
+        # this alongside the raw app binary into
+        # _site/firmware/<tag>/latest.json AND _site/latest.json.
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          PAGES_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: |
+          set -euo pipefail
+          SHA=$(sha256sum "release/portable_terminal.bin" | cut -d' ' -f1)
+          SIZE=$(stat -c%s "release/portable_terminal.bin")
+          cat > release/latest.json <<EOF
+          {
+            "tag": "${VERSION}",
+            "url": "${PAGES_BASE}/firmware/${VERSION}/portable_terminal.bin",
+            "sha256": "${SHA}",
+            "size": ${SIZE},
+            "project_name": "portable_terminal",
+            "chip_id": "esp32p4"
+          }
+          EOF
+          cat release/latest.json
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ steps.version.outputs.version }}
+          path: firmware-${{ steps.version.outputs.version }}.zip
+          retention-days: 90
+
+      - name: Upload raw app binary (for OTA + Pages staging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ steps.version.outputs.version }}
+          path: |
+            release/portable_terminal.bin
+            release/latest.json
+          retention-days: 90
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    # Only attach to a Release on actual tag pushes — manual dispatch runs
+    # just build the artifact and stop.
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version
+        id: version
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "build_date=$BUILD_DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware-${{ steps.version.outputs.version }}
+
+      - name: Download raw app artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-${{ steps.version.outputs.version }}
+          path: app_raw
+
+      - name: Create / update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            firmware-${{ steps.version.outputs.version }}.zip
+            app_raw/portable_terminal.bin
+            app_raw/latest.json
+          body: |
+            # portable_terminal ${{ steps.version.outputs.version }}
+
+            M5Stack Tab5 (ESP32-P4) ターミナルエミュレータのファームウェアリリース。
+
+            ## 同梱内容 (`firmware-${{ steps.version.outputs.version }}.zip`)
+
+            | ファイル | 用途 |
+            |---|---|
+            | `firmware-${{ steps.version.outputs.version }}.bin` | 単一ファイル形式 (オフセット `0x0` から書き込み)。Web Flasher / M5Burner 風ツール向け |
+            | `bootloader.bin` | ブートローダ (`0x2000`) |
+            | `partition-table.bin` | パーティションテーブル (`0x8000`) |
+            | `ota_data_initial.bin` | OTA データ初期値 (`0xd000`) |
+            | `portable_terminal.bin` | アプリ本体 (`0x10000`) |
+            | `flash_args` | `esptool` 向けのアドレス + ファイル指定 |
+
+            ## インストール
+
+            ### Web Flasher (Chrome / Edge)
+
+            <https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/>
+            にアクセスして本リリースを選択し、書き込んでください。
+
+            **注意**: Tab5 出荷時の ESP32-C6 ファームは `esp_hosted` 1.4.x で本ファームウェア
+            (2.x 系) と非互換のため、Wi-Fi を使うには C6 を更新する必要があります。手順は
+            リポジトリの README → "Wi-Fi C6 ファーム" を参照してください。
+
+            ### esptool で書き込み
+
+            ZIP を展開後:
+
+            ```bash
+            esptool.py --chip esp32p4 --port /dev/ttyACM0 --baud 460800 write_flash \
+              0x0 firmware-${{ steps.version.outputs.version }}.bin
+            ```
+
+            あるいは分割版を使う場合:
+
+            ```bash
+            esptool.py --chip esp32p4 --port /dev/ttyACM0 --baud 460800 \
+              --before default-reset --after hard-reset write-flash \
+              --flash-mode dio --flash-size 16MB --flash-freq 80m \
+              0x2000  bootloader.bin \
+              0x8000  partition-table.bin \
+              0xd000  ota_data_initial.bin \
+              0x10000 portable_terminal.bin
+            ```
+
+            ## 設定
+
+            このリリースはデフォルト Kconfig 値でビルドされています。Wi-Fi / SSH / Tailscale
+            などの接続情報は **書き込み後に設定 + 再ビルド** が必要です。詳細は README の
+            「設定」セクションを参照してください。
+
+            ## Build Information
+            - **ESP-IDF**: release-v6.0
+            - **Target**: ESP32-P4
+            - **Build Date**: ${{ steps.version.outputs.build_date }}
+            - **Commit**: ${{ github.sha }}
+
+            ## Full Changelog
+            https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

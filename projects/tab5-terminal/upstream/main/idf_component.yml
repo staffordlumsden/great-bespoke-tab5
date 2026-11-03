@@ -1,0 +1,22 @@
+## IDF Component Manager manifest for the Tab5 terminal app.
+dependencies:
+  idf: '>=6.0'
+  # Wi-Fi via the on-board ESP32-C6 co-processor.
+  # esp_hosted 2.x is the only line that compiles cleanly under IDF 6.0
+  # (1.4.x predates the esp_driver_sdmmc split). The protocol differs from
+  # the V1.4.1 firmware that ships from the M5 factory, so the C6 has to
+  # be re-flashed with a matching 2.x slave (see CLAUDE.md).
+  espressif/esp_hosted: '^2.12.7'
+  espressif/esp_wifi_remote: '^1.5.1'
+  # USB HID host (keyboard / mouse class driver). Used by
+  # main/input_usb_hid.cpp so a regular USB keyboard plugged into the
+  # Tab5 USB-A port acts as another input source.
+  espressif/usb_host_hid: '*'
+
+  # The Tab5 clip-on keyboard (ExtPort1, I2C 0x6D) speaks a well-
+  # documented register protocol — see main/input_tab5_kbd.cpp — so
+  # we drive it directly via esp_driver_i2c + GPIO instead of pulling
+  # in M5UnitUnified / M5Unit-KEYBOARD. The earlier attempt to use
+  # those libraries tripped an unresolved C++ static-init / heap-caps
+  # interaction with our IDF 6.0 build (see git history Phase 7 step 6
+  # debug session); the standalone driver sidesteps that entirely.

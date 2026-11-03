@@ -1,0 +1,76 @@
+# Common defaults for portable_terminal (target-independent).
+# Per-target overrides live in sdkconfig.defaults.<target>.
+
+# OTA-friendly partition layout (see partitions.csv)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_TWO_OTA=n
+CONFIG_PARTITION_TABLE_SINGLE_APP=n
+
+# Bootloader rollback
+CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y
+
+# HTTPS OTA over GitHub Pages needs the Mozilla CA bundle at runtime and
+# the partial-download path (256 KB chunk resumption — see
+# docs/OTA_UPDATE_DESIGN.md §4.6).
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+CONFIG_ESP_TLS_USING_MBEDTLS=y
+CONFIG_ESP_HTTPS_OTA_ALLOW_HTTP=n
+CONFIG_ESP_HTTPS_OTA_ENABLE_PARTIAL_DOWNLOAD=y
+
+# Tailscale on by default. The DISCO + multi-probe + pubip + outbound
+# CallMeMaybe work makes direct UDP land on hostile home networks with
+# DERP as the always-available fallback, so the reason this used to be
+# off (no direct-path negotiation, dead endpoints unreachable forever)
+# no longer applies. The auth key is empty by default — the client logs
+# an interactive login URL and the LCD shows it as a QR code, so a
+# freshly flashed device is provisioned without rebuilding.
+CONFIG_TAILSCALE_ENABLE=y
+
+# Allow DISCO to promote peers to direct UDP. DERP still carries
+# traffic until a Pong verifies a direct path, and it takes over again
+# if that path goes stale.
+CONFIG_TAILSCALE_DERP_ONLY=n
+
+# C++ exceptions off (default), but enable RTTI for std::expected helpers
+# if needed by future code. Keep size optimization for OTA partitions.
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+
+# Logging
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# Main task hosts the boot path that runs SSH handshake (libssh2 +
+# mbedTLS + lwIP are chunky on stack — handshake alone uses ~6 KB). The
+# 3.5 KB IDF default overflows once libssh2 trace is enabled and is
+# uncomfortably tight even without it.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=16384
+
+# FTDI USB-Serial host driver (used by UsbSerialConnection).
+CONFIG_USB_HOST_ENABLE_FTDI_SIO_DRIVER=y
+
+# WireGuard is pulled in implicitly by TAILSCALE_ENABLE (which selects
+# it), and Tailscale supplies the keys at runtime. Standalone WireGuard
+# with hand-configured keys stays opt-in: set TAILSCALE_ENABLE=n plus
+# WIREGUARD_ENABLE=y in sdkconfig.defaults.local for that.
+
+# Tailscale fans every tailnet peer into a separate WireGuard peer.
+# The WG default is 1 peer; raise to 16 so a typical tailnet fits
+# without "wireguardif_add_peer failed — max peers reached" spam.
+# Tracks CONFIG_TAILSCALE_MAX_PEERS upper bound. Each peer is ~800 B.
+CONFIG_WIREGUARD_MAX_PEERS=16
+
+# Allow .bss to spill into PSRAM via EXT_RAM_BSS_ATTR. The Tailscale
+# component tags its big H2 / HPACK / DERP frame buffers (~40 KB) with
+# this attribute; without it, those land in internal SRAM and starve
+# the esp_hosted SDIO mempool at boot.
+CONFIG_SPIRAM_ALLOW_BSS_SEG_EXTERNAL_MEMORY=y
+
+# WireGuard's lwIP netif is raw (not wrapped in an esp_netif). Without
+# this flag, lwIP stores the esp_netif pointer in `netif->state` —
+# colliding with WireGuard's use of the same field — and esp_netif's
+# ext callback dereferences a bogus pointer, panicking with a load
+# fault inside esp_netif_internal_dhcpc_cb when wireguardif's netif
+# comes up. Enabling bridge support flips esp_netif over to its
+# client_data slot for the back-pointer, so the WG netif's NULL
+# client_data is recognised and the callback returns early.
+CONFIG_ESP_NETIF_BRIDGE_EN=y

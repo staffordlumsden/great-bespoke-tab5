@@ -1,0 +1,8 @@
+.tools/
+**/artifacts/
+**/build*/
+**/managed_components/
+**/__pycache__/
+**/sdkconfig.old
+.DS_Store
+._*

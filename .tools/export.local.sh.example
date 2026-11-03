@@ -1,0 +1,5 @@
+# Copy to export.local.sh and replace this placeholder with an ESP-IDF v5.5.5
+# installation. Install ESP32-P4 tools using that SDK's install.sh first.
+export IDF_PATH="/REPLACE/WITH/YOUR/esp-idf"
+# Optional: set IDF_TOOLS_PATH to an existing ESP-IDF tools directory.
+# Otherwise the wrapper uses this workspace's .tools/espressif directory.

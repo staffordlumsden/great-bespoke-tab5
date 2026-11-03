@@ -1,0 +1,23 @@
+{
+  "range": "24h",
+  "scope": "self",
+  "granularity": "hour",
+  "group_by": "model",
+  "from": "2026-10-26T00:00:00Z",
+  "until": "2026-10-27T00:00:00Z",
+  "totals": {
+    "request_count": 1000,
+    "groups": [
+      {"model": "fixture-model-f", "request_count": 50},
+      {"model": "fixture-model-d", "request_count": 120},
+      {"model": "fixture-model-a", "request_count": 300},
+      {"model": "fixture-model-e", "request_count": 80},
+      {"model": "fixture-model-c", "request_count": 180},
+      {"model": "fixture-model-b", "request_count": 240}
+    ],
+    "remainder": {"request_count": 30}
+  },
+  "buckets": [
+    {"from": "2026-10-26T00:00:00Z", "until": "2026-10-27T00:00:00Z", "request_count": 1000}
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "snapshot_date": "2026-10-27",
+  "source_workspace": "Great Bespoke CYD",
+  "source_project": "projects/usb-drive",
+  "firmware_version": "0.1.2",
+  "esp_idf_version": "v5.5.5",
+  "esp_idf_commit": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "copied_files": 54,
+  "supplemental_licenses": 1,
+  "files": [
+    {
+      "path": "partitions.csv",
+      "source_path": "partitions.csv",
+      "size_bytes": 389,
+      "sha256": "50a10a48f02059e8c23fd19d5b699cae3a5913243948189811f3e73a4da24eb9"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_clock/CMakeLists.txt",
+      "source_path": "projects/launcher/firmware/components/cyd_clock/CMakeLists.txt",
+      "size_bytes": 118,
+      "sha256": "3ec8ddc21fcf5b2e83478f3559c5d8ab01f7bbbaca030e511c16af0c7b3c7643"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_clock/clock_policy.cpp",
+      "source_path": "projects/launcher/firmware/components/cyd_clock/clock_policy.cpp",
+      "size_bytes": 2770,
+      "sha256": "800f91fa7a8c3a03651f5bfefeb602746c5fbd2f7fba913b82b6a9734b4655d4"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_clock/cyd_clock.cpp",
+      "source_path": "projects/launcher/firmware/components/cyd_clock/cyd_clock.cpp",
+      "size_bytes": 2115,
+      "sha256": "9a3166db3b65b60af1a8926570cf5e4ad5a45492fe2e54c82a538838e0a8391b"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_clock/include/clock_policy.h",
+      "source_path": "projects/launcher/firmware/components/cyd_clock/include/clock_policy.h",
+      "size_bytes": 706,
+      "sha256": "07561d9f3191f8213d8845c98520a914c92e44542d95e96f7bc70a99ff630895"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_clock/include/cyd_clock.h",
+      "source_path": "projects/launcher/firmware/components/cyd_clock/include/cyd_clock.h",
+      "size_bytes": 527,
+      "sha256": "7da4d1b12f6958a137436444990b1eef22d67ca9aec46312c1acbcacbc042538"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_hal/CMakeLists.txt",
+      "source_path": "projects/launcher/firmware/components/cyd_hal/CMakeLists.txt",
+      "size_bytes": 168,
+      "sha256": "bd8a8de42e3f37e96193603db180e74997a34832af563f4a89e185dfe01b6ab0"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_hal/cyd_hal.cpp",
+      "source_path": "projects/launcher/firmware/components/cyd_hal/cyd_hal.cpp",
+      "size_bytes": 11143,
+      "sha256": "e211a97becc552e92ce5484ec0999577da299140e8ae067b2f99c74f44c3659e"
+    },
+    {
+      "path": "projects/launcher/firmware/components/cyd_hal/include/cyd_hal.h",
+      "source_path": "projects/launcher/firmware/components/cyd_hal/include/cyd_hal.h",
+      "size_bytes": 2274,
+      "sha256": "580ad1f9eeb3c06feacf26ecedcfdf4930dbd9da953348229f541645d8664c0e"
+    },
+    {
+      "path": "projects/launcher/firmware/main/pixel_fonts.h",
+      "source_path": "projects/launcher/firmware/main/pixel_fonts.h",
+      "size_bytes": 16421,
+      "sha256": "9b315681fb6ad468da8879913f42c9127dcddce7571a6fc9086076c70bf4bc87"
+    },
+    {
+      "path": "projects/launcher/third_party/PixelFonts/LICENSE",
+      "source_path": "projects/launcher/third_party/PixelFonts/LICENSE",
+      "size_bytes": 1063,
+      "sha256": "f1c026999a25f97372342bed6a72fce3f9b0974e37f16d49d08bba68f89905a9"
+    },
+    {
+      "path": "projects/launcher/tools/package_sd_app.py",
+      "source_path": "projects/launcher/tools/package_sd_app.py",
+      "size_bytes": 3983,
+      "sha256": "9b1ba82ad1ab337da64e107615c27cdf4c604d1e68d2874007cbea32613094bc"
+    },
+    {
+      "path": "projects/usb-drive/README.md",
+      "source_path": "projects/usb-drive/README.md",
+      "size_bytes": 4633,
+      "sha256": "78b6b95bb8c2ae567723ce32fcfb08f21e583e80ceab74e060899b8705180365"
+    },
+    {
+      "path": "projects/usb-drive/THIRD_PARTY_NOTICES.md",
+      "source_path": "projects/usb-drive/THIRD_PARTY_NOTICES.md",
+      "size_bytes": 605,
+      "sha256": "f8b6d68313188190ebde66bdc4c1df82e597b74b3a89ccd3a93feae1d65c5597"
+    },
+    {
+      "path": "projects/usb-drive/firmware/CMakeLists.txt",
+      "source_path": "projects/usb-drive/firmware/CMakeLists.txt",
+      "size_bytes": 337,
+      "sha256": "1b6839c90eb6f8f02611e8aa676d21dea3a0419886db4517ad8e4de1aaf964fa"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/CMakeLists.txt",
+      "source_path": "projects/usb-drive/firmware/main/CMakeLists.txt",
+      "size_bytes": 368,
+      "sha256": "30365168e110cc0bfd2b12e5023d147661641eaa36a189d9b514c847170cbba0"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/app_main.cpp",
+      "source_path": "projects/usb-drive/firmware/main/app_main.cpp",
+      "size_bytes": 3026,
+      "sha256": "6e4acebf16820dc7424579ad51e85765485b0abe6adb3b0220b9c07c9df4c1bd"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/console_bridge.cpp",
+      "source_path": "projects/usb-drive/firmware/main/console_bridge.cpp",
+      "size_bytes": 1464,
+      "sha256": "a23996e867dd74fbef259c1e15b8e85ad66fe711d66df74a6ec31b94b8c1adc8"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/console_bridge.h",
+      "source_path": "projects/usb-drive/firmware/main/console_bridge.h",
+      "size_bytes": 128,
+      "sha256": "299188d96b3a15b00e1fb95992e9328d968b6dc2799c38acc72543d0a1d21864"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/drive_path.cpp",
+      "source_path": "projects/usb-drive/firmware/main/drive_path.cpp",
+      "size_bytes": 2801,
+      "sha256": "cf5ba8b9f05371a2335179045ddd46dda8874884ff7a83074cd86213af9cb1d1"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/drive_path.h",
+      "source_path": "projects/usb-drive/firmware/main/drive_path.h",
+      "size_bytes": 295,
+      "sha256": "b653973a516a8416bbbf750ad327f9785cc301d98406af503d3dccfac301f85a"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/serial_drive.cpp",
+      "source_path": "projects/usb-drive/firmware/main/serial_drive.cpp",
+      "size_bytes": 16785,
+      "sha256": "fe3255f977e6f2125584b17eeed4f983709fa1861b0d2c28b34c071fac5a6b7a"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/serial_drive.h",
+      "source_path": "projects/usb-drive/firmware/main/serial_drive.h",
+      "size_bytes": 440,
+      "sha256": "3f3842168d9a09ec6fc9d8debbee7c7137008006564de0c47470ea6a088a210e"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/ui.cpp",
+      "source_path": "projects/usb-drive/firmware/main/ui.cpp",
+      "size_bytes": 4837,
+      "sha256": "850bacfd8fe715a885c6bfcf13c8906ef2783bf872b67d5937120e6f978df5c7"
+    },
+    {
+      "path": "projects/usb-drive/firmware/main/ui.h",
+      "source_path": "projects/usb-drive/firmware/main/ui.h",
+      "size_bytes": 280,
+      "sha256": "e124c8e05b2cb393f4b0054e8667ac30f367c78c95c94e1333e9499abc3afe16"
+    },
+    {
+      "path": "projects/usb-drive/firmware/sdkconfig",
+      "source_path": "projects/usb-drive/firmware/sdkconfig",
+      "size_bytes": 66732,
+      "sha256": "f673756479bf65575ee8ed7e9a31ea8926907f5a101537cc86768cc07e20df57"
+    },
+    {
+      "path": "projects/usb-drive/firmware/sdkconfig.defaults",
+      "source_path": "projects/usb-drive/firmware/sdkconfig.defaults",
+      "size_bytes": 898,
+      "sha256": "582f1f58f83fbd0e79c74a151c7a7b31c3bdc3901ccd03384614a8baa6285711"
+    },
+    {
+      "path": "projects/usb-drive/firmware/tools/build.sh",
+      "source_path": "projects/usb-drive/firmware/tools/build.sh",
+      "size_bytes": 548,
+      "sha256": "f6bf4f151b78fbd2e37d2a9dbebf630b171a412dca4f5ccbbeb1a324465079a8"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.icns",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.icns",
+      "size_bytes": 62240,
+      "sha256": "ef58d57bbe7a790914876ab32e704e2004c6d84edd980ecb2b05f4a98bba2374"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_128x128.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_128x128.png",
+      "size_bytes": 1131,
+      "sha256": "bc92600e048ca8960de8adc503f6eaf094655bf7da9379d3aa81d69d5d5fead7"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_128x128@2x.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_128x128@2x.png",
+      "size_bytes": 2215,
+      "sha256": "c726fa4c08d2d1b21234208ed6c807072376be59a193903ebddef90c1944b7f0"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_16x16.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_16x16.png",
+      "size_bytes": 272,
+      "sha256": "2e46448e607d0574c6f727939d19aa3393f99a694cd8d4b7b7054e0885e2a0b9"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_16x16@2x.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_16x16@2x.png",
+      "size_bytes": 426,
+      "sha256": "8f4e74ae68c2d905a614b8a3bcded3220ece9342da18833f4c7fba513c018ed1"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_256x256.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_256x256.png",
+      "size_bytes": 2215,
+      "sha256": "c726fa4c08d2d1b21234208ed6c807072376be59a193903ebddef90c1944b7f0"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_256x256@2x.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_256x256@2x.png",
+      "size_bytes": 4646,
+      "sha256": "446797cd67e39a1b76466fbd2269db8d5e736468e764ff1f1dcbe5dd035fa5a0"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_32x32.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_32x32.png",
+      "size_bytes": 426,
+      "sha256": "8f4e74ae68c2d905a614b8a3bcded3220ece9342da18833f4c7fba513c018ed1"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_32x32@2x.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_32x32@2x.png",
+      "size_bytes": 682,
+      "sha256": "d8c1750102630b3f2f8c723f8cd43755bd770ed26b753bf76a576a39f95e1a30"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_512x512.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_512x512.png",
+      "size_bytes": 4646,
+      "sha256": "446797cd67e39a1b76466fbd2269db8d5e736468e764ff1f1dcbe5dd035fa5a0"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_512x512@2x.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.iconset/icon_512x512@2x.png",
+      "size_bytes": 11058,
+      "sha256": "34adf294e8d93b6e7e2dff0f7a5fdf7d4e2cb94277c71337eb866fa6bab658cd"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/USBDrive.png",
+      "source_path": "projects/usb-drive/host/assets/USBDrive.png",
+      "size_bytes": 4646,
+      "sha256": "446797cd67e39a1b76466fbd2269db8d5e736468e764ff1f1dcbe5dd035fa5a0"
+    },
+    {
+      "path": "projects/usb-drive/host/assets/make_icon.py",
+      "source_path": "projects/usb-drive/host/assets/make_icon.py",
+      "size_bytes": 1758,
+      "sha256": "532b9c42851e05a15313d0fb471ecb8c009d4436f00e85fe0933aab6d9370254"
+    },
+    {
+      "path": "projects/usb-drive/host/build-release.sh",
+      "source_path": "projects/usb-drive/host/build-release.sh",
+      "size_bytes": 2353,
+      "sha256": "e30f8a1ad4fc5ec829f5a01a93b917903bdeb7759e659e13bd65da91e4359278"
+    },
+    {
+      "path": "projects/usb-drive/host/fs.go",
+      "source_path": "projects/usb-drive/host/fs.go",
+      "size_bytes": 5911,
+      "sha256": "f7c3fa23678d2937c1485ee5102da21819f45cfd6018457c65326f958184aa28"
+    },
+    {
+      "path": "projects/usb-drive/host/fs_test.go",
+      "source_path": "projects/usb-drive/host/fs_test.go",
+      "size_bytes": 837,
+      "sha256": "31041ff219781c2288bf350346f8c7e1ee0bfca5b0c6a41b8d9ed932574a455a"
+    },
+    {
+      "path": "projects/usb-drive/host/go.mod",
+      "source_path": "projects/usb-drive/host/go.mod",
+      "size_bytes": 211,
+      "sha256": "89275da7ebbc69d0584afe06a15feba95bc0c612f742ff24f2ec140cd1063e2c"
+    },
+    {
+      "path": "projects/usb-drive/host/go.sum",
+      "source_path": "projects/usb-drive/host/go.sum",
+      "size_bytes": 1300,
+      "sha256": "80243c5f42e67ea8e01a94a74a16edc465fcc785deb9111d623dc7a7f6e521de"
+    },
+    {
+      "path": "projects/usb-drive/host/main.go",
+      "source_path": "projects/usb-drive/host/main.go",
+      "size_bytes": 3128,
+      "sha256": "1679537e2dad4ce9daa67c9e7ea15c9a989f6de0876152176c5bea93fe2c0e65"
+    },
+    {
+      "path": "projects/usb-drive/host/serial.go",
+      "source_path": "projects/usb-drive/host/serial.go",
+      "size_bytes": 6458,
+      "sha256": "3d51ebcc6eff9c4fd2329d4c6993e6d82b206d73aa252b0b6c5083f32c3bcd5e"
+    },
+    {
+      "path": "projects/usb-drive/host/third_party/creack-goselect-LICENSE",
+      "source_path": "github.com/creack/goselect@v0.1.2/LICENSE",
+      "size_bytes": 1088,
+      "sha256": "c844a90215df09623d43e9aaddcbf4bee8a3f095e838685d1fa59b015bf95e7a"
+    },
+    {
+      "path": "projects/usb-drive/host/third_party/go-bug-st-serial-LICENSE",
+      "source_path": "projects/usb-drive/host/third_party/go-bug-st-serial-LICENSE",
+      "size_bytes": 1512,
+      "sha256": "9c775dae0c8089a7aa186af1eff98237933ee3edc3b949874beb72bfe08895a8"
+    },
+    {
+      "path": "projects/usb-drive/host/third_party/golang-x-net-LICENSE",
+      "source_path": "projects/usb-drive/host/third_party/golang-x-net-LICENSE",
+      "size_bytes": 1479,
+      "sha256": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067"
+    },
+    {
+      "path": "projects/usb-drive/host/third_party/golang-x-sys-LICENSE",
+      "source_path": "projects/usb-drive/host/third_party/golang-x-sys-LICENSE",
+      "size_bytes": 1453,
+      "sha256": "911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad"
+    },
+    {
+      "path": "projects/usb-drive/tests/run-native.sh",
+      "source_path": "projects/usb-drive/tests/run-native.sh",
+      "size_bytes": 526,
+      "sha256": "486f3136374b0a6606a0c46c5f57f441ff267bbff353ce258ea62ac9358ef0f8"
+    },
+    {
+      "path": "projects/usb-drive/tests/test_ui_path.cpp",
+      "source_path": "projects/usb-drive/tests/test_ui_path.cpp",
+      "size_bytes": 2820,
+      "sha256": "472b2345b4d13ea2cc7d16a4612100e6796e1d442a992feec5f8fb5a61c00cf1"
+    },
+    {
+      "path": "projects/usb-drive/tools/device_update.py",
+      "source_path": "projects/usb-drive/tools/device_update.py",
+      "size_bytes": 6266,
+      "sha256": "87b8760d482ce9f2a5fae2b91f4cc3321c897adc98a4a3dc845a2ca04cc7b899"
+    }
+  ]
+}
