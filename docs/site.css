@@ -621,6 +621,10 @@ h2 {
   box-shadow: inset 4px 0 var(--amber);
 }
 
+.m5stack-section .m5stack-panel {
+  margin-top: 0;
+}
+
 .m5stack-copy h3 {
   margin: 0 0 12px;
   font-family: "PixelTitle", monospace;
