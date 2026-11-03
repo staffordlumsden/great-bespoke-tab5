@@ -4,6 +4,8 @@ Public ESP-IDF workspace for the M5Stack Tab5: a resident launcher and a set of
 SD-installable applications for the ESP32-P4, ST7121 display/touch controller and
 factory ESP32-C6 radio.
 
+Project site: <https://staffordlumsden.github.io/great-bespoke-tab5/>
+
 The tested target is an ESP32-P4 revision v1.3 with 16 MB flash, 32 MB PSRAM,
 720×1280 native display scanout and an exFAT SD card. The projects use ESP-IDF
 v5.5.5 and retain checked-in `sdkconfig` and dependency locks.
@@ -150,6 +152,14 @@ Both the upstream project and this fork are distributed under the MIT licence;
 the fork retains the upstream copyright and third-party notices in its
 [`LICENSE`](https://github.com/staffordlumsden/Tab5-Media-Player/blob/main/LICENSE)
 and packaged application licence.
+
+## License
+
+Original Great Bespoke Tab5 source, documentation, screenshots and website
+content are Copyright (c) 2026 Stafford Lumsden and licensed under the MIT
+License in [LICENSE](LICENSE). Third-party components, fonts and imported source
+retain the licences recorded in [NOTICE.md](NOTICE.md) and their project-level
+notice files.
 
 ## Repository hygiene
 

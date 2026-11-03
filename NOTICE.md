@@ -1,8 +1,9 @@
 # Ownership and third-party notices
 
-Unless a file or project states otherwise, publishing this repository does not
-grant an additional open-source licence for original Great Bespoke Tab5 project
-code. Project-specific licence files take precedence for the files they cover.
+Original Great Bespoke Tab5 source, documentation, screenshots and website
+content are Copyright (c) 2026 Stafford Lumsden and licensed under the MIT
+License in `LICENSE`. Project-specific licence files and the third-party notices
+below take precedence for the material they cover.
 
 Bundled third-party material keeps its original notices and terms:
 

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Great Bespoke Tab5 Console</title>
+  <meta name="description" content="A resident ESP32-P4 Console and nine SD-installable applications for the M5Stack Tab5.">
+  <meta name="theme-color" content="#080b10">
+  <meta property="og:title" content="Great Bespoke Tab5 Console">
+  <meta property="og:description" content="One resident Console. Nine purpose-built firmware applications for M5Stack Tab5.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://staffordlumsden.github.io/great-bespoke-tab5/images/screenshots/console.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">SKIP TO CONTENT</a>
+
+  <header class="site-header">
+    <div class="topline">
+      <a class="brand" href="#console" aria-label="Great Bespoke Tab5 home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        TAB5 // GREAT BESPOKE
+      </a>
+      <div class="top-status">
+        <span class="status-led" aria-hidden="true"></span>
+        PUBLIC RELEASE <span aria-hidden="true">/</span> SYD <span class="device-clock" data-clock>--:--</span>
+      </div>
+    </div>
+
+    <nav class="console-tabs" aria-label="Application sections">
+      <a href="#console" aria-current="location">CONSOLE</a>
+      <a href="#camera">CAMERA</a>
+      <a href="#file-server">FILES</a>
+      <a href="#html-viewer">HTML VIEW</a>
+      <a href="#ollama-analytics">OLLAMA</a>
+      <a href="#quicknote">QUICKNOTE</a>
+      <a href="#shell">SHELL</a>
+      <a href="#terminal">TERMINAL</a>
+      <a href="#weather">WEATHER</a>
+      <a href="#media-player">fMP3</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="console" aria-labelledby="console-title">
+      <div class="hero-copy">
+        <p class="eyebrow">M5STACK TAB5 / ESP32-P4 / CONSOLE 0.3.7</p>
+        <h1 id="console-title">ONE CONSOLE.<br><span>NINE APPS.</span></h1>
+        <p class="hero-lead">
+          A resident launcher for the M5Stack Tab5, built around device telemetry,
+          settings, radio controls and a validated SD application library. Console
+          stays in the factory partition while each firmware runs safely from an
+          inactive OTA slot.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#library">EXPLORE FIRMWARE</a>
+          <a class="button" href="https://github.com/staffordlumsden/great-bespoke-tab5">VIEW SOURCE</a>
+        </div>
+        <div class="metrics" aria-label="Tab5 platform summary">
+          <div class="metric" style="--accent: var(--blue)"><strong>9</strong><span>SD APPLICATIONS</span></div>
+          <div class="metric" style="--accent: var(--green)"><strong>32</strong><span>PACKAGE LIBRARY</span></div>
+          <div class="metric" style="--accent: var(--amber)"><strong>720&times;1280</strong><span>NATIVE SCANOUT</span></div>
+          <div class="metric" style="--accent: var(--purple)"><strong>16 / 32</strong><span>MB FLASH / PSRAM</span></div>
+        </div>
+      </div>
+
+      <div class="console-device">
+        <div class="device-bar">
+          <strong>RESIDENT // CONSOLE 0.3.7</strong>
+          <span>ST7121 / 5-INCH PANEL</span>
+        </div>
+        <img src="images/screenshots/console.png" width="1280" height="720" alt="TAB5 Console dashboard showing storage, memory, battery, radio status and application shortcuts">
+        <p class="capture-note">SOURCE-RENDERED UI PREVIEW / SYNTHETIC TELEMETRY</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="console-features-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">RESIDENT SYSTEM</p>
+          <h2 id="console-features-title">CONSOLE DOES MORE</h2>
+        </div>
+        <p>
+          Console is the stable control surface around the applications: it checks
+          hardware, exposes live status and validates every SD package before boot.
+        </p>
+      </div>
+      <div class="console-features">
+        <article class="feature" style="--accent: var(--blue)">
+          <span class="feature-code">SYS.01</span>
+          <h3>LIVE TELEMETRY</h3>
+          <p>Battery, SD capacity, RAM, PSRAM, flash allocation, RTC and keyboard state in one dashboard.</p>
+        </article>
+        <article class="feature" style="--accent: var(--green)">
+          <span class="feature-code">SYS.02</span>
+          <h3>SD APP LIBRARY</h3>
+          <p>Deterministic sorting, image identity checks, 5 MiB slot limits and inactive-slot installation.</p>
+        </article>
+        <article class="feature" style="--accent: var(--amber)">
+          <span class="feature-code">SYS.03</span>
+          <h3>RADIO CONTROL</h3>
+          <p>Factory-compatible ESP32-C6 Wi-Fi and Bluetooth controls with guarded radio power and initialization.</p>
+        </article>
+        <article class="feature" style="--accent: var(--purple)">
+          <span class="feature-code">SYS.04</span>
+          <h3>FAST DIRTY REGIONS</h3>
+          <p>PixelFonts chrome and damage-aware redraws keep the launcher responsive without periodic full-screen repaints.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="library" aria-labelledby="library-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">SD APPLICATION LIBRARY</p>
+          <h2 id="library-title">NINE FIRMWARES</h2>
+        </div>
+        <p>
+          Purpose-built applications share Console's visual language, hardware
+          layer and safe return path. Select a card to inspect its capabilities.
+        </p>
+      </div>
+
+      <div class="app-grid">
+        <article class="app-card" id="camera" style="--accent: var(--purple)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.01 / CAMERA</p><h3>TAB5 CAMERA</h3></div>
+            <span class="version">0.2.1-DEV</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/camera.jpg" width="720" height="1280" loading="lazy" alt="Tab5 Camera portrait preview with a composition grid"></figure>
+          <div class="app-body">
+            <p>A portrait camera workspace for the Tab5 sensor stack, with framing tools and local SD capture.</p>
+            <ul class="chips"><li>LIVE PREVIEW</li><li>JPEG CAPTURE</li><li>GALLERY</li><li>GRID / MONO</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-camera">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="file-server" style="--accent: var(--green)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.02 / FILES</p><h3>TAB5 FILE SERVER</h3></div>
+            <span class="version">0.1.0</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/file-server.png" width="1280" height="720" loading="lazy" alt="Tab5 File Server showing hotspot status, access code and SD telemetry"></figure>
+          <div class="app-body">
+            <p>A browser-based SD explorer that works over the Tab5 hotspot or an existing LAN connection.</p>
+            <ul class="chips"><li>HOTSPOT / LAN</li><li>UPLOAD / DOWNLOAD</li><li>INLINE HTML</li><li>8-DIGIT ACCESS</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-fileserver">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="html-viewer" style="--accent: var(--cyan)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.03 / HTML VIEW</p><h3>TAB5 HTML VIEWER</h3></div>
+            <span class="version">0.1.1</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/html-viewer.png" width="1280" height="720" loading="lazy" alt="Tab5 HTML Viewer file picker listing HTML files on the SD card"></figure>
+          <div class="app-body">
+            <p>An offline SD document reader with a full-screen picker and a clean, touch-driven reading surface.</p>
+            <ul class="chips"><li>SD FILE PICKER</li><li>OFL TYPEFACES</li><li>PINCH ZOOM</li><li>4-WAY ROTATE</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-htmlviewer">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="ollama-analytics" style="--accent: var(--orange)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.04 / OLLAMA</p><h3>OLLAMA ANALYTICS</h3></div>
+            <span class="version">0.1.1</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/ollama-analytics.png" width="1280" height="720" loading="lazy" alt="Ollama Analytics dashboard with model request shares, quota and plan balance"></figure>
+          <div class="app-body">
+            <p>A compact dashboard for Ollama request activity, model mix and provider-reported balance.</p>
+            <ul class="chips"><li>24H REQUESTS</li><li>MODEL SHARE</li><li>BALANCE / QUOTA</li><li>DARK / LIGHT</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-ollama-analytics">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="quicknote" style="--accent: var(--amber)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.05 / QUICKNOTE</p><h3>TAB5 QUICKNOTE</h3></div>
+            <span class="version">0.1.0</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/quicknote.png" width="1280" height="720" loading="lazy" alt="QuickNote Markdown editor with line numbers, syntax colour and Console toolbar"></figure>
+          <div class="app-body">
+            <p>A focused Markdown workspace with durable SD notes and recovery from interrupted edits.</p>
+            <ul class="chips"><li>MARKDOWN</li><li>DRAFT RECOVERY</li><li>SD STORAGE</li><li>TAB5 / USB KEYS</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-quicknote">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="shell" style="--accent: var(--red)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.06 / SHELL</p><h3>TAB5 SHELL</h3></div>
+            <span class="version">0.1.3</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/shell.png" width="1280" height="720" loading="lazy" alt="Tab5 Shell local command session with filesystem commands and status controls"></figure>
+          <div class="app-body">
+            <p>A local-first command environment with bounded tools, a native editor and optional SSH.</p>
+            <ul class="chips"><li>LOCAL COMMANDS</li><li>EDITOR / GLOW</li><li>LUA</li><li>OPTIONAL SSH</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-shell">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="terminal" style="--accent: var(--cyan)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.07 / TERMINAL</p><h3>TAB5 TERMINAL</h3></div>
+            <span class="version">0.1.4</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/terminal.png" width="1280" height="720" loading="lazy" alt="Tab5 Terminal connected SSH session with a collapsed connection rail"></figure>
+          <div class="app-body">
+            <p>A zoomable SSH terminal with a keyboard-first workflow, VT100 rendering and local scrollback.</p>
+            <ul class="chips"><li>SSH</li><li>VT100 GRAPHICS</li><li>SCROLLBACK</li><li>3 ZOOM LEVELS</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-terminal">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="weather" style="--accent: var(--blue)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.08 / WEATHER</p><h3>TAB5 WEATHER</h3></div>
+            <span class="version">0.1.2</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/weather.png" width="1280" height="720" loading="lazy" alt="Tab5 Weather current conditions page showing Sydney and a five-hour forecast"></figure>
+          <div class="app-body">
+            <p>A network-aware Open-Meteo client for current conditions, forecasts, rain, wind, sun and moon.</p>
+            <ul class="chips"><li>OPEN-METEO</li><li>CURRENT + 5H</li><li>SAVED PLACES</li><li>C / F THEMES</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-weather">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="media-player" style="--accent: var(--magenta)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.09 / fMP3</p><h3>fMP3 PLAYER</h3></div>
+            <span class="version">0.1.2</span>
+          </div>
+          <figure class="app-shot"><img src="images/screenshots/media-player.jpg" width="720" height="1280" loading="lazy" alt="fMP3 Player showing a photograph with navigation and playback controls"></figure>
+          <div class="app-body">
+            <p>A Console-skinned media player for local audio, video and images, backed by the upstream media engine.</p>
+            <ul class="chips"><li>AUDIO / VIDEO</li><li>IMAGES</li><li>PLAYLISTS</li><li>MEDIA METADATA</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/Tab5-Media-Player">PROJECT README</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="hardware" aria-labelledby="hardware-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">HARDWARE + RECOVERY MODEL</p>
+          <h2 id="hardware-title">BUILT FOR THE REAL DEVICE</h2>
+        </div>
+        <p>
+          The launcher and applications target a known ESP32-P4 revision and keep
+          recovery, radio firmware and user data outside the application update path.
+        </p>
+      </div>
+      <div class="hardware-grid">
+        <article class="hardware-card" style="--accent: var(--blue)">
+          <strong>TARGET / P4 v1.3</strong>
+          <h3>360 MHZ + 32 MB PSRAM</h3>
+          <p>16 MB flash, ST7121 display/touch and the factory ESP32-C6 radio image remain the reference configuration.</p>
+        </article>
+        <article class="hardware-card" style="--accent: var(--green)">
+          <strong>SAFE / SD INSTALL</strong>
+          <h3>INACTIVE OTA SLOT</h3>
+          <p>Console validates project identity, chip target, revision range, segment checksum, SHA-256 and the 5 MiB slot limit.</p>
+        </article>
+        <article class="hardware-card" style="--accent: var(--amber)">
+          <strong>RECOVERY / CONSOLE</strong>
+          <h3>FACTORY PARTITION</h3>
+          <p>The resident Console stays at <code>0x10000</code>; applications never replace it, erase NVS or overwrite the C6 image.</p>
+        </article>
+      </div>
+      <div class="partition-map" aria-label="Tab5 partition layout"><b>0x10000</b>  FACTORY CONSOLE       4 MiB
+<b>0x410000</b> OTA DATA              8 KiB
+<b>0x420000</b> APPLICATION SLOT 0    5 MiB
+<b>0x920000</b> APPLICATION SLOT 1    5 MiB</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-main">
+      <div class="footer-brand">TAB5 // GREAT BESPOKE<br><span class="footer-copy">© 2026 Stafford Lumsden</span></div>
+      <div class="footer-copy">
+        Original source, documentation, screenshots and website content are available under the MIT License.
+        PixelFonts, upstream firmware libraries and other third-party material retain their included licences.
+        <div class="footer-links">
+          <a href="license.html">MIT LICENSE</a>
+          <a href="https://github.com/staffordlumsden/great-bespoke-tab5">GITHUB</a>
+          <a href="https://github.com/staffordlumsden/great-bespoke-tab5/releases">RELEASES</a>
+          <a href="https://github.com/staffordlumsden/great-bespoke-tab5/blob/main/NOTICE.md">NOTICES</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
