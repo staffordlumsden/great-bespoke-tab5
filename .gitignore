@@ -36,6 +36,9 @@
 ._*
 __pycache__/
 *.py[cod]
+# Calendar exports and feed addresses can contain private information.
+projects/tab5-calendar/**/*.ics
+projects/tab5-calendar/**/feeds.txt
 
 # Private build-time PIN (copy from the .example template)
 projects/tab5-console/main/tab5_lock_pin_private.h

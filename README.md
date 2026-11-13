@@ -12,7 +12,7 @@ v5.5.5 and retain checked-in `sdkconfig` and dependency locks.
 
 ## Screenshots
 
-The resident Console and the nine SD-installable applications are shown below.
+The resident Console and selected SD-installable applications are shown below.
 These are representative UI renders or simulator captures with synthetic data,
 not physical framebuffer captures or hardware-acceptance evidence. Physical
 acceptance status remains documented in each project's README and release
@@ -36,6 +36,7 @@ checkpoint.
 | Application | Version | Purpose |
 |---|---|---|
 | [TAB5 Console](projects/tab5-console/) | 0.3.7 | Resident launcher, telemetry dashboard, settings, radio UI and SD app installer |
+| [Tab5 Calendar](projects/tab5-calendar/) | 0.1.2-dev | Read-only calendar views from SD iCalendar files and supported subscription feeds |
 | [Tab5 Camera](projects/tab5-camera/) | 0.2.1-dev | Camera preview, JPEG capture, gallery and monochrome/grid controls |
 | [Tab5 File Server](projects/tab5-fileserver/) | 0.1.0 | LAN/hotspot SD file explorer with uploads, downloads and inline HTML |
 | [Tab5 HTML Viewer](projects/tab5-htmlviewer/) | 0.1.1 | SD HTML reader with rotation, scrolling, zoom and OFL-embedded fonts |
@@ -47,7 +48,7 @@ checkpoint.
 | [fMP3 Player](projects/tab5-media-player/) | 0.1.2 | Console-skinned audio, video and image player with SD browser and playlists |
 
 [Tab5 HAL bring-up](projects/tab5-hal-bringup/) is an isolated diagnostic, not
-part of the nine-application launcher set. It validates the display, touch, SD
+part of the SD application set. It validates the display, touch, SD
 and USB HID paths without providing an end-user application.
 
 The fMP3 Player is maintained as a separate public companion repository and is

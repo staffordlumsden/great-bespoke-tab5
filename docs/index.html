@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Great Bespoke Tab5 Console</title>
-  <meta name="description" content="A resident ESP32-P4 Console and nine SD-installable applications for the M5Stack Tab5.">
+  <meta name="description" content="A resident ESP32-P4 Console and ten SD-installable applications for the M5Stack Tab5.">
   <meta name="theme-color" content="#080b10">
   <meta property="og:title" content="Great Bespoke Tab5 Console">
-  <meta property="og:description" content="One resident Console. Nine purpose-built firmware applications for M5Stack Tab5.">
+  <meta property="og:description" content="One resident Console. Ten purpose-built firmware applications for M5Stack Tab5.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://staffordlumsden.github.io/great-bespoke-tab5/images/screenshots/console.png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -31,6 +31,7 @@
 
     <nav class="console-tabs" aria-label="Application sections">
       <a href="#console" aria-current="location">CONSOLE</a>
+      <a href="#calendar">CALENDAR</a>
       <a href="#camera">CAMERA</a>
       <a href="#file-server">FILES</a>
       <a href="#html-viewer">HTML VIEW</a>
@@ -47,7 +48,7 @@
     <section class="hero" id="console" aria-labelledby="console-title">
       <div class="hero-copy">
         <p class="eyebrow">M5STACK TAB5 / ESP32-P4 / CONSOLE 0.3.7</p>
-        <h1 id="console-title">ONE CONSOLE.<br><span>NINE APPS.</span></h1>
+        <h1 id="console-title">ONE CONSOLE.<br><span>TEN APPS.</span></h1>
         <p class="hero-lead">
           A resident launcher for the M5Stack Tab5, built around device telemetry,
           settings, radio controls and a validated SD application library. Console
@@ -59,7 +60,7 @@
           <a class="button" href="https://github.com/staffordlumsden/great-bespoke-tab5">VIEW SOURCE</a>
         </div>
         <div class="metrics" aria-label="Tab5 platform summary">
-          <div class="metric" style="--accent: var(--blue)"><strong>9</strong><span>SD APPLICATIONS</span></div>
+          <div class="metric" style="--accent: var(--blue)"><strong>10</strong><span>SD APPLICATIONS</span></div>
           <div class="metric" style="--accent: var(--green)"><strong>32</strong><span>PACKAGE LIBRARY</span></div>
           <div class="metric" style="--accent: var(--amber)"><strong>720&times;1280</strong><span>NATIVE SCANOUT</span></div>
           <div class="metric" style="--accent: var(--purple)"><strong>16 / 32</strong><span>MB FLASH / PSRAM</span></div>
@@ -119,7 +120,7 @@
           <p>
             Tab5 is M5Stack's ESP32-P4 development kit with a 5-inch display,
             touch input, camera and expansion. The clip-on Tab5 Keyboard adds a
-            physical input path for Console, Terminal, Shell and QuickNote.
+            physical input path for Console, Calendar, Terminal, Shell and QuickNote.
           </p>
           <div class="m5stack-links">
             <a class="button" href="https://m5stack.com/" target="_blank" rel="noopener">M5STACK</a>
@@ -141,12 +142,12 @@
       <div class="section-head">
         <div>
           <p class="section-kicker">SD APPLICATION LIBRARY / ROADMAP</p>
-          <h2 id="library-title">NINE AVAILABLE. ONE NEXT.</h2>
+          <h2 id="library-title">TEN AVAILABLE. ONE NEXT.</h2>
         </div>
         <p>
-          Nine purpose-built applications share Console's visual language,
-          hardware layer and safe return path. A tenth card previews what is
-          coming next.
+          Ten applications share Console's visual language, hardware layer and
+          safe return path. Calendar is a development build; the final card
+          previews what is coming next.
         </p>
       </div>
 
@@ -265,6 +266,27 @@
             <p>A Console-skinned media player for local audio, video and images, backed by the upstream media engine.</p>
             <ul class="chips"><li>AUDIO / VIDEO</li><li>IMAGES</li><li>PLAYLISTS</li><li>MEDIA METADATA</li></ul>
             <a class="project-link" href="https://github.com/staffordlumsden/Tab5-Media-Player">PROJECT README</a>
+          </div>
+        </article>
+
+        <article class="app-card" id="calendar" style="--accent: var(--blue)">
+          <div class="app-card-head">
+            <div><p class="app-index">APP.10 / CALENDAR</p><h3>TAB5 CALENDAR</h3></div>
+            <span class="version">0.1.2-DEV</span>
+          </div>
+          <div class="calendar-preview" role="img" aria-label="Illustrative calendar preview, not a device capture">
+            <div class="calendar-preview-head"><span>MONTH VIEW</span><span>ILLUSTRATIVE</span></div>
+            <div class="calendar-preview-grid" aria-hidden="true">
+              <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+              <div>1<i class="event-blue">MEETING</i></div><div>2</div><div>3<i class="event-green">PROJECT</i></div><div>4</div><div>5<i class="event-amber">PLANS</i></div><div>6</div><div>7</div>
+              <div>8</div><div>9<i class="event-purple">EVENT</i></div><div>10</div><div>11<i class="event-red">REMINDER</i></div><div>12</div><div>13</div><div>14</div>
+            </div>
+          </div>
+          <div class="app-body">
+            <p>Read-only month, week and agenda views for SD iCalendar files and supported Google or Outlook feeds. Development build; physical validation remains pending.</p>
+            <ul class="chips"><li>MONTH / WEEK / AGENDA</li><li>ICS FILES</li><li>COLOUR / VISIBILITY</li><li>KEYBOARD</li></ul>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/releases/tag/tab5-calendar-0.1.2-dev">DOWNLOAD DEVELOPMENT PACKAGE</a>
+            <a class="project-link" href="https://github.com/staffordlumsden/great-bespoke-tab5/tree/main/projects/tab5-calendar">PROJECT README</a>
           </div>
         </article>
 
