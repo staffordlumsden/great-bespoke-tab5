@@ -176,7 +176,9 @@ writes. Only HTTP 200 is accepted; redirects, credentials in URLs, non-HTTPS,
 alternate ports, oversized or incomplete bodies fail. No downloaded file is
 executed/installed automatically. DNS/TLS/transfer are synchronous and may pause
 local input; there is no resumable download or background cancellation. Live
-network and TLS operation remain unverified.
+network and TLS operation were not separately documented in the earlier test
+record. On 13 November 2026, the user confirmed the Tab5 firmwares work as
+intended.
 
 ## Build, validate and install
 

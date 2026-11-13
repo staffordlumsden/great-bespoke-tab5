@@ -47,6 +47,10 @@ checkpoint.
 | [Tab5 Weather](projects/tab5-weather/) | 0.1.2 | Open-Meteo forecast and geocoding client |
 | [fMP3 Player](projects/tab5-media-player/) | 0.1.2 | Console-skinned audio, video and image player with SD browser and playlists |
 
+On 13 November 2026, the user confirmed that the Tab5 firmwares, including
+Calendar, work as intended. See the [acceptance note](docs/TAB5_ACCEPTANCE.md)
+for the scope of that confirmation and earlier test records.
+
 [Tab5 HAL bring-up](projects/tab5-hal-bringup/) is an isolated diagnostic, not
 part of the SD application set. It validates the display, touch, SD
 and USB HID paths without providing an end-user application.

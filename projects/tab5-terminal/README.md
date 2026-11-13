@@ -155,8 +155,6 @@ Host tests cover the imported terminal core and static delivery contract. An
 ESP-IDF build proves compilation for ESP32-P4 and the package tool verifies the
 image header, revision range, 16 MB declaration, checksum and appended SHA-256.
 The 0.1.1 physical run established display, saved Wi-Fi, USB HID and live SSH.
-The 0.1.3 device run exposed the missing line-graphics coverage. The exact
-0.1.4 package is byte-verified on SD but still requires device acceptance for
-Unicode/DEC box drawing, monospace punctuation, connected-session sidebar
-transition and the existing zoom/scrollback paths. See `DELIVERY.md` for the
-current checkpoint.
+The 0.1.3 device run exposed the missing line-graphics coverage, addressed in
+0.1.4. On 13 November 2026, the user confirmed the Tab5 firmwares work as
+intended. See `DELIVERY.md` for the earlier detailed evidence and checklist.

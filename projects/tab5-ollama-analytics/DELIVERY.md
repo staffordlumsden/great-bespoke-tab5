@@ -50,7 +50,7 @@ The resident Console, OTA slots, NVS, C6 firmware and SD format were not written
 Return the card to the Tab5. In Console, choose **Launch from SD Card ->
 Tab5OllamaAnalytics-0.1.1 -> Install + run**.
 
-The user accepted the original Ollama workflow on 27 October 2026. Version
-0.1.1 has been staged to SD, not installed or booted by this update; its renamed
-header, touch controls, data refresh and Console return still need observation.
+The user accepted the original Ollama workflow on 27 October 2026. At this
+checkpoint version 0.1.1 had been staged to SD but not installed by that update.
+On 13 November 2026, the user confirmed the Tab5 firmwares work as intended.
 Instrumented first-boot rollback/recovery checks remain separate.

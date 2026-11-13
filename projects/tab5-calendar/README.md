@@ -1,9 +1,10 @@
 # Tab5 Calendar 0.1.2-dev
 
-An SD-installed calendar application for the Great Bespoke Tab5. This is a
-**development build**, not physically accepted. It combines local `.ics` files
-with Google and Outlook iCalendar subscriptions, and uses the Console dark palette and
-PixelFonts. The factory Console remains the launcher and is never overwritten.
+An SD-installed calendar application for the Great Bespoke Tab5. This
+development build combines local `.ics` files with Google and Outlook iCalendar
+subscriptions, and uses the Console dark palette and PixelFonts. On 13 November
+2026, the user confirmed the Tab5 firmwares, including Calendar, work as
+intended. The factory Console remains the launcher.
 
 ## Calendar setup
 
@@ -72,7 +73,6 @@ calendars (up to eight network feeds).
 
 The [0.1.2-dev pre-release](https://github.com/staffordlumsden/great-bespoke-tab5/releases/tag/tab5-calendar-0.1.2-dev)
 contains the matching image, manifest and licence for the Console SD library.
-This development package has not passed physical acceptance.
 
 ```sh
 bash tests/run-native.sh
@@ -89,5 +89,6 @@ App Library. Direct flash targets are
 blocked. Do not flash this application at the factory Console offset.
 
 Host sanitizer tests and real calendar parser checks passed on 13 November
-2026. The v0.1.2-dev candidate has not been tested on the physical device.
-See `../../docs/TAB5_CALENDAR_DEVELOPMENT.md`.
+2026. The user's general firmware acceptance is recorded in
+`../../docs/TAB5_ACCEPTANCE.md`; earlier evidence is in
+`../../docs/TAB5_CALENDAR_DEVELOPMENT.md`.

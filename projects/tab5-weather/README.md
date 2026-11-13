@@ -62,9 +62,10 @@ not install this layout. Weather's direct flash targets are blocked so that it
 can only be deployed through the SD library workflow. The migration is now
 installed, and Console boot confirms both OTA slots and launcher readiness.
 The user observed SD launch and Console return with 0.1.0-dev and subsequently
-accepted the repaired 0.1.1 behaviour. First-boot rollback remains unexercised,
-and the 0.1.2 snapshot still needs one successful fetch/return to populate the
-Console card. See the [0.1.1 checkpoint](../../docs/TAB5_SMOOTH_LAUNCH_0.2.2.md)
+accepted the repaired 0.1.1 behaviour. The 0.1.2 snapshot populates the Console
+card after a successful fetch and return. First-boot rollback fault testing is a
+separate scenario. On 13 November 2026, the user confirmed the Tab5 firmwares
+work as intended. See the [0.1.1 checkpoint](../../docs/TAB5_SMOOTH_LAUNCH_0.2.2.md)
 and [the launcher contract](../../docs/TAB5_SD_LAUNCHER.md).
 
 ## Check and build

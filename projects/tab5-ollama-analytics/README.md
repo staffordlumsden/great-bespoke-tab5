@@ -62,7 +62,7 @@ authentication, bounded/chunked bodies, partial success and Retry-After.
 Response size/depth limits remain 24 KiB/12. Public fixtures are synthetic.
 
 [Delivery checkpoint](DELIVERY.md) records image identity and SD verification.
-The renamed image's physical display/touch, Wi-Fi/TLS and Console return still
-need observation after installation; rollback fault/recovery checks remain
-separate. Private keys/configuration, live responses, SDKs and build caches are
+On 13 November 2026, the user confirmed the Tab5 firmwares work as intended;
+instrumented rollback fault/recovery checks remain a separate evidence category.
+Private keys/configuration, live responses, SDKs and build caches are
 ignored. See [notices](THIRD_PARTY_NOTICES.md) and `PROVENANCE.json`.

@@ -27,7 +27,6 @@ Tab5 HTML Viewer.
   `d1abf2477a012e365e296c037da61c7514403618c5a3669bea240ea1d05b581e`.
 - The public-release scanner and `gitleaks` pass for this repository state.
 
-The 0.1.1 image has not been installed on a physical Tab5. Physical rendering,
-touch, rotation, zoom, scrolling and Console return remain acceptance checks for
-the exact packaged image. The previous 0.1.0 device result remains historical
-and does not establish acceptance of this font replacement.
+At this checkpoint the 0.1.1 image had not yet been installed on a physical
+Tab5. On 13 November 2026, the user confirmed that the Tab5 firmwares work as
+intended. The confirmation did not enumerate each rendering or input scenario.

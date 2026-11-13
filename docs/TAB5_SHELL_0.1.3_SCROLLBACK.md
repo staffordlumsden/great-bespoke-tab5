@@ -60,8 +60,9 @@ peaks and stack margins remain unmeasured.
   as the latest rollback and removed older 0.1.1 SD files only after a verified
   local recovery copy. Other firmware and the private SSH pin file were compared
   and unchanged. SD safely ejected. Raw logs/audits remain ignored/local.
-- **Physical scrollback/navigation acceptance: pending operator check.** Prior
-  0.1.2 startup/SSH acceptance is separate from this exact package.
+- At this checkpoint, detailed scrollback/navigation acceptance had not been
+  recorded. On 13 November 2026, the user confirmed that the Tab5 firmwares work
+  as intended; that statement did not enumerate individual test scenarios.
 
 ## Release files
 

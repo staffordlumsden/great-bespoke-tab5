@@ -1,5 +1,10 @@
 # Tab5 Calendar 0.1.0-dev checkpoint
 
+**Later update, 13 November 2026:** The user confirmed that all Tab5 firmwares,
+including Calendar, work as intended. The entries below preserve the evidence
+and limitations recorded at each earlier checkpoint; see
+[`TAB5_ACCEPTANCE.md`](TAB5_ACCEPTANCE.md).
+
 13 November 2026: Development candidate built as an SD-library app. It includes
 Console-style month, week, agenda and per-calendar settings screens, local ICS
 files plus Google iCal URL configuration, saved Console Wi-Fi, TLS CA-bundle
@@ -69,9 +74,8 @@ Native sanitizer tests passed, including simulated retries, HTTP errors, empty
 partial responses, button hit targets and text width. ESP-IDF v5.5.5 build and
 SD package validation passed: 1,657,424 bytes, minimum ESP32-P4 revision 1.0,
 SHA-256 `7b8bd7ff3a789d5bd1f86d215ba29f2338f334e3edce312cabbfd8678f5bd358`.
-This candidate has not been installed or physically tested. On-device Outlook
-fetching, touch responsiveness, text legibility and OTA behaviour remain to be
-confirmed. Existing calendar files, settings and the Console were not changed.
+At this checkpoint the candidate had not yet been installed or physically
+tested. Existing calendar files, settings and the Console were not changed.
 
 ### SD-card staging
 
@@ -83,4 +87,5 @@ The previous 0.1.1-dev package was moved into a dated directory under
 `/firmware/rollback/`; other packages and calendar data were not changed.
 The card was ejected cleanly. No application was flashed or installed to an OTA
 slot during this operation: inserting the card and launching 0.1.2-dev through
-Console's SD App Library remains necessary. Physical acceptance is pending.
+At that point Console's SD App Library was the remaining installation step. The
+user later confirmed that the Tab5 firmwares work as intended.

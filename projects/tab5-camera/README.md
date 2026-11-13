@@ -15,8 +15,8 @@ The intended sensor mode is RAW8 1280 x 720, converted by the ISP to RGB565. A
 separate capture task owns two mapped PSRAM frames and lends one to the display
 owner at a time; a bounded queue prevents a frame from being requeued while the
 preview is reading it. The app discards incomplete frames. The preview is a
-scaled portrait image. PPA acceleration has a software fallback. Color quality,
-capture reliability and sustained performance still need physical verification.
+scaled portrait image. PPA acceleration has a software fallback. The user
+confirmed on 13 November 2026 that the Tab5 firmwares work as intended.
 ISP automatic processing is enabled as in M5Stack's reference demo.
 
 Tap **CAPTURE** to save a full-resolution 720 x 1280 portrait JPEG at quality
@@ -60,9 +60,8 @@ versions have been delivered and tested.
 ## Bring-up gate
 
 The 0.1.0-dev hardware run verified normal shutter capture, SD write/readback,
-independent JPEG decoding and preview recovery. Test media removal, full-card
-handling, interrupted writes, colour accuracy and longer-term stability before
-claiming field reliability. The on-device deletion confirmation remains untested.
-A currently
-unrecognized serial device must not be assumed to be the P4. The source/build
+independent JPEG decoding and preview recovery. Earlier records did not detail
+media-removal, full-card, interrupted-write, deletion or long-duration stress
+tests; the later confirmation is general rather than a test-by-test report.
+An unrecognized serial device must not be assumed to be the P4. The source/build
 checkpoint is in `docs/TAB5_CAMERA_BRINGUP.md`.

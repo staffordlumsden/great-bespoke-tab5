@@ -2,6 +2,10 @@
 
 This file separates completed host evidence from physical acceptance.
 
+On 13 November 2026, the user confirmed that the Tab5 firmwares work as
+intended. The earlier detailed observations and checklist below are retained
+as historical evidence; the later confirmation did not enumerate each item.
+
 ## Host evidence
 
 - Upstream fork created and tracked snapshot imported.
@@ -21,7 +25,7 @@ This file separates completed host evidence from physical acceptance.
 - C6 compatibility evidence: this unit's previously captured factory build is
   `ESP32C6-WiFi-SDIO-Interface-V1.4.1-96bea3a`; the current live Console 0.3.0
   check again completed ESP-Hosted initialization and joined Wi-Fi. The exact
-  terminal runtime line remains a physical acceptance item below.
+  terminal runtime line was an item in the earlier checklist below.
 - Orientation: fixed landscape rotation 0; no terminal rotation control.
 - Input: Tab5 Keyboard I2C primary, USB-A HID fallback.
 - Input diagnostics: enumeration and first received key byte are reported as
@@ -97,7 +101,7 @@ This file separates completed host evidence from physical acceptance.
   host inspection confirmed that the literal ASCII `-`, `_` and `|` bitmaps
   themselves were present. This is the defect repaired by 0.1.4.
 
-## Physical acceptance still required for 0.1.4
+## Earlier device checklist for 0.1.4
 
 - first complete ST7121 frame and successful app-boot confirmation;
 - connected Unicode and DEC box drawing, block/shade characters, literal
@@ -114,4 +118,5 @@ This file separates completed host evidence from physical acceptance.
 - Tab5 Keyboard accessory typing, symbols, Ctrl/Alt, arrows and repeat;
 - reset/Console return.
 
-No item in this section should be marked complete from a host build alone.
+The earlier checkpoint did not record each item individually. The later user
+confirmation above reports general acceptance of the Tab5 firmwares.
