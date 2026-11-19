@@ -1,0 +1,38 @@
+# Third-Party Notices
+
+Tab5 Thin Client (`Tab5ThinClient`) incorporates the following third-party
+software and font components under their respective licenses:
+
+1. **Tab5_thinclient (Upstream)** — MIT License
+   Copyright (c) 2026 airpocket-soundman
+   https://github.com/airpocket-soundman/Tab5_thinclient
+
+2. **MicroPython** (`firmware/components/micropython_embed`) — MIT License
+   Copyright (c) 2013-2024 Damien P. George and MicroPython contributors
+
+3. **PixelFonts** (`pixelfont_7x5_thin`) — MIT License
+   Copyright (c) 2026 mcer12 (commit 344a6cfcd660b8546258485befb7576a47790d7d)
+
+4. **Terminus Font** (`TerminusBitmap.*`) — SIL Open Font License 1.1
+   Copyright (c) 2001-2020 Dimitar Zhekov (and Tab5_thinclient bitmap packing)
+
+5. **LovyanGFX Font Decoder & Ascii8x16** — FreeBSD 2-Clause License
+   Copyright (c) 2020 lovyan03 (https://github.com/lovyan03/LovyanGFX)
+
+6. **IPA Fonts (`lgfx_font_japan_gothic_{16,20,28,36}`)** — IPA Font License Agreement v1.0
+   Information-technology Promotion Agency, Japan (IPA).
+   The bitmap tables in `firmware/components/thinclient_fonts/lgfx_japan_gothic_tables.c`
+   are extracted verbatim for sizes 16, 20, 28, and 36 from LovyanGFX
+   `src/lgfx/Fonts/IPA/lgfx_font_japan.c`. Original files and replacement
+   instructions are retained in LovyanGFX upstream.
+
+7. **libssh2** (`libssh2_esp`) — BSD-3-Clause License
+   Copyright (c) 2004-2024 Sara Golemon, The libssh2 project and contributors
+
+8. **image_framework & compression_framework** (`imgf` / `cmpf`) — MIT License
+   Copyright (c) 2026 Hiroki Kawakami
+
+9. **Great Bespoke Tab5 HAL, Boot, Wi-Fi, TOFU & SD Installer Components** — MIT License
+   Copyright (c) 2026 Great Bespoke Tab5 contributors
+
+Full license texts for SD binary distribution are bundled in `Tab5ThinClient-LICENSE.txt`.

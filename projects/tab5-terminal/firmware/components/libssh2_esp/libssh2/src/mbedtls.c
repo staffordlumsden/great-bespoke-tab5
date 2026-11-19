@@ -1359,6 +1359,7 @@ _libssh2_mbedtls_ecdsa_new_private_frommemory(libssh2_ecdsa_ctx **ctx,
         goto cleanup;
 
     memcpy(ntdata, data, data_len);
+    ntdata[data_len] = '\0';
 
     if(_libssh2_mbedtls_parse_eckey(ctx, &pkey, session,
                                     ntdata, data_len + 1, pwd) == 0)

@@ -44,6 +44,7 @@ checkpoint.
 | [Tab5 QuickNote](projects/tab5-quicknote/) | 0.1.0 | Markdown notes with draft recovery and Tab5/USB keyboard input |
 | [Tab5 Shell](projects/tab5-shell/) | 0.1.3 | Local shell and bounded filesystem tools, with optional SSH |
 | [Tab5 Terminal](projects/tab5-terminal/) | 0.1.4 | SSH terminal with Tab5/USB keyboard input, zoom and scrollback |
+| [Tab5 ThinClient](projects/tab5-thinclient/) | 0.1.3-dev | Console-styled SSH and local terminal, forked from [airpocket-soundman/Tab5_thinclient](https://github.com/airpocket-soundman/Tab5_thinclient) |
 | [Tab5 Weather](projects/tab5-weather/) | 0.1.2 | Open-Meteo forecast and geocoding client |
 | [fMP3 Player](projects/tab5-media-player/) | 0.1.3 | Console-skinned media player with SD browser, playlists, listening lock and USB Audio |
 

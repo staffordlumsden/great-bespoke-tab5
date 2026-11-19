@@ -1,0 +1,42 @@
+idf_component_register(
+    SRCS
+        "app_main.cpp"
+        "hid_translate.cpp"
+        "image_viewer.cpp"
+        "input_tab5_kbd.cpp"
+        "keyboard_mapper.cpp"
+        "local_cli.cpp"
+        "python_runner.cpp"
+        "settings_store.cpp"
+        "ssh_client.cpp"
+        "ssh_key_utils.cpp"
+        "storage_bridge.cpp"
+        "tab5_gpio_bridge_idf.cpp"
+        "tab5_gpio_module.c"
+        "terminal_buffer.cpp"
+        "terminal_emulator.cpp"
+        "thinclient_gfx.cpp"
+        "tofu.cpp"
+        "wifi_runtime.cpp"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        tab5_hal
+        tab5_app_boot
+        tab5_weather_wifi
+        libssh2_esp
+        image_framework
+        thinclient_fonts
+        micropython_embed
+        nvs_flash
+        esp_netif
+        esp_wifi
+        esp_timer
+        driver
+        esp_adc
+        lwip
+    EMBED_TXTFILES
+        "../../data/tab5-fuse-server.py"
+)
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers)

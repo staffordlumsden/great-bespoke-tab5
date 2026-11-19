@@ -1,0 +1,6 @@
+# The registry's optional esp_h264 dependency rule references this symbol,
+# although the locked esp_video 2.0.1 does not define it. Keep the optional
+# customised H.264 package disabled for this project and its existing lock.
+config ESP_VIDEO_USE_CUSTOMIZED_ESP_H264_VERSION
+    bool "Use customised H.264 component version"
+    default n
