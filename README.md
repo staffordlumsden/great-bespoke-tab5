@@ -23,7 +23,7 @@ checkpoint.
 | <img src="docs/images/screenshots/console.png" width="540" alt="TAB5 Console launcher dashboard"> | <img src="docs/images/screenshots/file-server.png" width="540" alt="Tab5 File Server hotspot dashboard"> |
 | **TAB5 Console 0.3.7**<br>Resident launcher with live device telemetry, settings, radio controls, Weather status, Camera launch and the 32-package SD App Library. | **Tab5 File Server 0.1.0**<br>Local LAN or hotspot file explorer for the SD card, with uploads, downloads, inline HTML and an eight-digit access code. |
 | <img src="docs/images/screenshots/camera.jpg" width="270" alt="Tab5 Camera portrait preview with grid enabled"> | <img src="docs/images/screenshots/media-player.jpg" width="270" alt="fMP3 media player displaying a photograph"> |
-| **Tab5 Camera 0.2.1-dev**<br>Portrait camera preview with JPEG capture, SD gallery, composition grid and monochrome mode. | **fMP3 Player 0.1.2**<br>Console-skinned audio, video and image player with SD browsing, playlists, playback controls and media metadata. |
+| **Tab5 Camera 0.2.1-dev**<br>Portrait camera preview with JPEG capture, SD gallery, composition grid and monochrome mode. | **fMP3 Player 0.1.3**<br>Console-skinned media player with a two-stage listening lock, SD browsing, playlists and USB Audio output. |
 | <img src="docs/images/screenshots/html-viewer.png" width="540" alt="Tab5 HTML Viewer SD file picker"> | <img src="docs/images/screenshots/ollama-analytics.png" width="540" alt="Tab5 Ollama Analytics dashboard"> |
 | **Tab5 HTML Viewer 0.1.1**<br>Full-screen SD HTML picker and reader with document typography, pinch zoom, scrolling and four-way rotation. | **Tab5 Ollama Analytics 0.1.1**<br>Ollama-only model usage, request-share, balance and quota dashboard with light, dark and Console themes. |
 | <img src="docs/images/screenshots/quicknote.png" width="540" alt="Tab5 QuickNote Markdown editor"> | <img src="docs/images/screenshots/shell.png" width="540" alt="Tab5 Shell local command session"> |
@@ -45,7 +45,7 @@ checkpoint.
 | [Tab5 Shell](projects/tab5-shell/) | 0.1.3 | Local shell and bounded filesystem tools, with optional SSH |
 | [Tab5 Terminal](projects/tab5-terminal/) | 0.1.4 | SSH terminal with Tab5/USB keyboard input, zoom and scrollback |
 | [Tab5 Weather](projects/tab5-weather/) | 0.1.2 | Open-Meteo forecast and geocoding client |
-| [fMP3 Player](projects/tab5-media-player/) | 0.1.2 | Console-skinned audio, video and image player with SD browser and playlists |
+| [fMP3 Player](projects/tab5-media-player/) | 0.1.3 | Console-skinned media player with SD browser, playlists, listening lock and USB Audio |
 
 On 13 November 2026, the user confirmed that the Tab5 firmwares, including
 Calendar, work as intended. See the [acceptance note](docs/TAB5_ACCEPTANCE.md)
