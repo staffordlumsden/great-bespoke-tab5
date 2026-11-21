@@ -9,10 +9,12 @@ FONT = (ROOT / "main" / "fonts" / "pixel_fonts.h").read_text()
 CMAKE = (ROOT / "CMakeLists.txt").read_text()
 BINARY = ROOT / "build" / "tab5_console.bin"
 
-for label in ("Console", "Shell", "Ollama", "Files", "HTML View", "Camera"):
+for label in ("Console", "Thin Client", "AI Usage", "Files", "HTML View", "Camera"):
     assert f'"{label}"' in SOURCE, f"missing tab {label}"
 assert '"Network"' not in SOURCE, "Network tab must be replaced with Camera"
 assert '"Web Server"' not in SOURCE, "Web Server tab must be replaced with HTML View"
+assert '"Shell"' not in SOURCE, "Shell tab must be replaced with Thin Client"
+assert '"Ollama"' not in SOURCE, "Ollama tab must be replaced with AI Usage"
 
 for face in ("pixelfont_7x5_thin", "pixelfont_11x5_thin", "pixelfont_13x7_semibold"):
     assert face in SOURCE and face in FONT, f"missing exact PixelFonts face {face}"
@@ -20,12 +22,13 @@ for face in ("pixelfont_7x5_thin", "pixelfont_11x5_thin", "pixelfont_13x7_semibo
 for control in ("Appearance", "Brightness", "Volume", "Bluetooth", "Battery", "Rotate", "Power Off"):
     assert f'"{control}"' in SOURCE, f"missing control {control}"
 
-assert 'set(PROJECT_VER "0.3.7")' in CMAKE
-assert 'i == 1 ? RED' in SOURCE, "Shell tab must use the red highlight"
+assert 'set(PROJECT_VER "0.3.8")' in CMAKE
+assert 'i == 1 ? RED' in SOURCE, "Thin Client tab must use the red highlight"
+assert 'i == 2 ? ORANGE' in SOURCE, "AI Usage tab must use the amber/yellow highlight"
 assert 'i == 3 ? GREEN' in SOURCE, "Files tab must use the green highlight"
 assert 'i == 4 ? BLUE' in SOURCE, "HTML View tab must use the blue highlight"
 assert 'i == 5 ? PURPLE' in SOURCE, "Camera tab must use the purple highlight"
-assert 'UPDATE_DESCRIPTION = "PURPLE CAMERA TAB & 32-PKG SD LIBRARY"' in SOURCE
+assert 'UPDATE_DESCRIPTION = "THIN CLIENT & AI USAGE TABS"' in SOURCE
 assert "0xeef1f4" in SOURCE and "0xffffff" in SOURCE, "neutral light palette missing"
 assert "matrix_clock_run" in SOURCE, "Matrix lockscreen integration missing"
 sleep_handler = SOURCE.split("void screen_sleep()", 1)[1].split("void adjust_brightness", 1)[0]
@@ -54,16 +57,26 @@ assert "PASSWORD MUST BE 8+ CHARACTERS" in SOURCE
 assert "PASSWORD_SYMBOLS_0" in SOURCE
 assert 'password_symbols ? "ABC" : "SYM"' in SOURCE
 assert "wifi_scroll" in SOURCE and "ble_scroll" in SOURCE
-assert '50, "UP"' in SOURCE and '50, "DOWN"' in SOURCE
+assert 'list_nav_h(), "UP"' in SOURCE and 'list_nav_h(), "DOWN"' in SOURCE
 assert "radio_visible_state_changed" in SOURCE
-assert 'OLLAMA_PROJECT = "Tab5OllamaAnalytics"' in SOURCE
-assert "installer_auto_ollama" in SOURCE and "open_installer(true)" in SOURCE
+assert 'THINCLIENT_PROJECT = "Tab5ThinClient"' in SOURCE
+assert 'THINCLIENT_VERSION = "0.1.3-dev"' in SOURCE
+assert 'AIUSAGE_PROJECT = "Tab5AIUsage"' in SOURCE
+assert 'AIUSAGE_VERSION = "0.2.2"' in SOURCE
+assert 'WEATHER_PROJECT = "Tab5Weather"' in SOURCE
+assert 'WEATHER_VERSION = "0.1.2"' in SOURCE
+assert "find_auto_launch_package" in SOURCE
+assert "open_installer(AutoLaunch::none)" in SOURCE
+assert "constexpr int HEADER_TOP = 8;" in SOURCE and "constexpr int TABS_TOP = 78;" in SOURCE
+clock_fn = SOURCE.split("void draw_clock()", 1)[1].split("void draw_header()", 1)[0]
+assert "panel(" not in clock_fn, "Clock tile must not have a box around it"
+assert "battery_x()" in SOURCE and "clock_x()" in SOURCE
 assert "Icon::rotate" in SOURCE and 'save_setting("rotation"' in SOURCE
 for rotation in ("TAB5_ROTATION_0", "TAB5_ROTATION_90", "TAB5_ROTATION_180", "TAB5_ROTATION_270"):
     assert rotation in HAL, f"missing HAL transform {rotation}"
-assert "rect(0, 54, width, bottom - 54" in SOURCE
+assert "rect(0, BODY_TOP, width, bottom - BODY_TOP" in SOURCE
 assert "icon(Icon::sd" in SOURCE
-assert "DIRTY_CONTROLS | DIRTY_STORAGE | DIRTY_BATTERY" in SOURCE
+assert "DIRTY_CONTROLS | DIRTY_STORAGE | DIRTY_POWER" in SOURCE
 assert "tab5_radio_power_set(wifi_on || bluetooth_on)" not in SOURCE
 assert (ROOT / "partitions.csv").is_file()
 assert BINARY.is_file(), "build/tab5_console.bin is missing"
@@ -72,15 +85,16 @@ assert (ROOT / "third_party" / "PixelFonts" / "LICENSE").is_file()
 
 assert "Overlay::clock" in SOURCE, "Clock settings overlay missing"
 assert "tab5_rtc_set" in HAL and "tab5_rtc_set" in SOURCE, "RTC write missing"
-assert 'SHELL_PROJECT = "Tab5Shell"' in SOURCE, "Shell auto-launch project missing"
+assert "AutoLaunch::thinclient" in SOURCE, "ThinClient auto-launch missing"
+assert "AutoLaunch::ai_usage" in SOURCE, "AI Usage auto-launch missing"
+assert "AutoLaunch::weather" in SOURCE, "Weather auto-launch missing"
 assert 'FILESERVER_PROJECT = "Tab5FileServer"' in SOURCE, "FileServer auto-launch project missing"
 assert 'HTMLVIEWER_PROJECT = "Tab5HtmlViewer"' in SOURCE, "HtmlViewer auto-launch project missing"
 assert 'CAMERA_PROJECT = "Tab5Camera"' in SOURCE, "Camera auto-launch project missing"
-assert "AutoLaunch::shell" in SOURCE, "Shell auto-launch missing"
 assert "AutoLaunch::fileserver" in SOURCE, "FileServer auto-launch missing"
 assert "AutoLaunch::htmlviewer" in SOURCE, "HtmlViewer auto-launch missing"
 assert "AutoLaunch::camera" in SOURCE, "Camera auto-launch missing"
 assert "sel ? theme.text : theme.muted, 4" in SOURCE, "SD library 2x firmware font scale missing"
 assert '#include "input_tab5_kbd.hpp"' in SOURCE, "Tab5 Keyboard driver integration missing"
 
-print(f"PASS: TAB5 Console 0.3.7 UI/radio/rotation/matrix/clock/launcher contract; image={BINARY.stat().st_size} bytes")
+print(f"PASS: TAB5 Console 0.3.8 UI/radio/rotation/matrix/clock/launcher contract; image={BINARY.stat().st_size} bytes")

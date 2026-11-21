@@ -13,8 +13,8 @@ constexpr PowerAction power_actions[] = {
 };
 constexpr PowerButton power_button(bool portrait, PowerAction action) {
     const int i = static_cast<int>(action) - 1;
-    return portrait ? PowerButton{24 + (i % 2) * 340, 852 + (i / 2) * 112, 332, 100}
-                    : PowerButton{500 + i * 192, 512, 180, 126};
+    return portrait ? PowerButton{24 + (i % 2) * 340, 710 + (i / 2) * 112, 332, 100}
+                    : PowerButton{24 + i * 312, 512, 296, 126};
 }
 constexpr PowerAction power_hit(bool portrait, int x, int y) {
     for (auto action : power_actions)

@@ -9,7 +9,7 @@ int main() {
         const int footer = portrait ? 1210 : 650;
         for (auto action : tab5::power_actions) {
             const auto b = tab5::power_button(portrait, action);
-            assert(b.x >= 0 && b.y >= (portrait ? 840 : 512));
+            assert(b.x >= 0 && b.y >= (portrait ? 710 : 512));
             assert(b.x + b.width <= width && b.y + b.height <= footer);
             assert(b.width >= 100 && b.height >= 80);
             assert(tab5::power_hit(portrait, b.x, b.y) == action);

@@ -21,7 +21,7 @@ checkpoint.
 | Resident launcher | SD application |
 |:---:|:---:|
 | <img src="docs/images/screenshots/console.png" width="540" alt="TAB5 Console launcher dashboard"> | <img src="docs/images/screenshots/file-server.png" width="540" alt="Tab5 File Server hotspot dashboard"> |
-| **TAB5 Console 0.3.7**<br>Resident launcher with live device telemetry, settings, radio controls, Weather status, Camera launch and the 32-package SD App Library. | **Tab5 File Server 0.1.0**<br>Local LAN or hotspot file explorer for the SD card, with uploads, downloads, inline HTML and an eight-digit access code. |
+| **TAB5 Console 0.3.8**<br>Resident launcher with live device telemetry, unboxed header clock and compact battery tile, Thin Client / AI Usage / Weather / Files / HTML View / Camera tabs and the 32-package SD App Library. | **Tab5 File Server 0.1.0**<br>Local LAN or hotspot file explorer for the SD card, with uploads, downloads, inline HTML and an eight-digit access code. |
 | <img src="docs/images/screenshots/camera.jpg" width="270" alt="Tab5 Camera portrait preview with grid enabled"> | <img src="docs/images/screenshots/media-player.jpg" width="270" alt="fMP3 media player displaying a photograph"> |
 | **Tab5 Camera 0.2.1-dev**<br>Portrait camera preview with JPEG capture, SD gallery, composition grid and monochrome mode. | **fMP3 Player 0.1.3**<br>Console-skinned media player with a two-stage listening lock, SD browsing, playlists and USB Audio output. |
 | <img src="docs/images/screenshots/html-viewer.png" width="540" alt="Tab5 HTML Viewer SD file picker"> | <img src="docs/images/screenshots/ollama-analytics.png" width="540" alt="Tab5 Ollama Analytics dashboard"> |
@@ -35,7 +35,7 @@ checkpoint.
 
 | Application | Version | Purpose |
 |---|---|---|
-| [TAB5 Console](projects/tab5-console/) | 0.3.7 | Resident launcher, telemetry dashboard, settings, radio UI and SD app installer |
+| [TAB5 Console](projects/tab5-console/) | 0.3.8 | Resident launcher, telemetry dashboard, settings, radio UI and SD app installer |
 | [Tab5 Calendar](projects/tab5-calendar/) | 0.1.2-dev | Read-only calendar views from SD iCalendar files and supported subscription feeds |
 | [Tab5 Camera](projects/tab5-camera/) | 0.2.1-dev | Camera preview, JPEG capture, gallery and monochrome/grid controls |
 | [Tab5 File Server](projects/tab5-fileserver/) | 0.1.0 | LAN/hotspot SD file explorer with uploads, downloads and inline HTML |
@@ -64,20 +64,18 @@ The original [CYD USB Drive 0.1.2 firmware and Mac bridge](companions/cyd-usb-dr
 are preserved as a separate companion snapshot. Its firmware and universal Mac
 application are published as [release assets](https://github.com/staffordlumsden/great-bespoke-tab5/releases/tag/cyd-usb-drive-0.1.2).
 
-## Console 0.3.7
+## Console 0.3.8
 
-Console 0.3.7 is the current resident release. It adds:
+Console 0.3.8 is the current resident release. It builds on [Console 0.3.7](docs/TAB5_CONSOLE_0.3.7.md) and updates the launcher and header layout:
 
-- a purple **Camera** launcher tab in place of the disabled **Network** tab;
-- one-tap discovery, validation and installation of `Tab5Camera`;
-- an SD App Library capacity of 32 packages;
-- deterministic case-insensitive sorting by project and version;
-- filtering of macOS `._*` metadata files.
+- moves the 6-tab bar below the `TAB5 Console` header;
+- removes the box around the header clock while retaining its tap-to-open **Clock & Date Settings** action;
+- shrinks the **Battery** tile and places it in the top-right header beside the clock, allowing the four power controls to span the bottom row;
+- renames the red **Shell** tab to **Thin Client** (`Tab5ThinClient` `0.1.3-dev` auto-launch);
+- renames the amber **Ollama** tab to **AI Usage** (`Tab5AIUsage` `0.2.2` auto-launch);
+- updates tapping the **Weather** card to auto-launch `Tab5Weather` `0.1.2`.
 
-The accepted launcher also provides red **Shell**, green **Files**, blue **HTML
-View**, orange **Ollama** and the general **SD App Library** workflow. See the
-[0.3.7 checkpoint](docs/TAB5_CONSOLE_0.3.7.md) for build and physical-acceptance
-details.
+The accepted launcher also retains green **Files**, blue **HTML View**, purple **Camera** and the general 32-package **SD App Library** workflow. See the [0.3.8 checkpoint](docs/TAB5_CONSOLE_0.3.8.md) for build and physical-acceptance details.
 
 ## SD application model
 

@@ -32,9 +32,13 @@
 
 namespace {
 constexpr const char *TAG = "TAB5_CONSOLE";
-constexpr const char *UPDATE_DESCRIPTION = "PURPLE CAMERA TAB & 32-PKG SD LIBRARY";
-constexpr const char *OLLAMA_PROJECT = "Tab5OllamaAnalytics";
-constexpr const char *SHELL_PROJECT = "Tab5Shell";
+constexpr const char *UPDATE_DESCRIPTION = "THIN CLIENT & AI USAGE TABS";
+constexpr const char *THINCLIENT_PROJECT = "Tab5ThinClient";
+constexpr const char *THINCLIENT_VERSION = "0.1.3-dev";
+constexpr const char *AIUSAGE_PROJECT = "Tab5AIUsage";
+constexpr const char *AIUSAGE_VERSION = "0.2.2";
+constexpr const char *WEATHER_PROJECT = "Tab5Weather";
+constexpr const char *WEATHER_VERSION = "0.1.2";
 constexpr const char *FILESERVER_PROJECT = "Tab5FileServer";
 constexpr const char *HTMLVIEWER_PROJECT = "Tab5HtmlViewer";
 constexpr const char *CAMERA_PROJECT = "Tab5Camera";
@@ -76,54 +80,72 @@ bool weather_saved = false;
 
 enum class Overlay { none, wifi, bluetooth, installer, clock };
 Overlay overlay = Overlay::none;
-enum class AutoLaunch { none, ollama, shell, fileserver, htmlviewer, camera };
+enum class AutoLaunch { none, thinclient, ai_usage, weather, fileserver, htmlviewer, camera };
 AutoLaunch installer_auto_launch = AutoLaunch::none;
 
 const char *auto_launch_project(AutoLaunch target)
 {
     switch (target) {
-    case AutoLaunch::shell:      return SHELL_PROJECT;
+    case AutoLaunch::thinclient: return THINCLIENT_PROJECT;
+    case AutoLaunch::ai_usage:   return AIUSAGE_PROJECT;
+    case AutoLaunch::weather:    return WEATHER_PROJECT;
     case AutoLaunch::fileserver: return FILESERVER_PROJECT;
     case AutoLaunch::htmlviewer: return HTMLVIEWER_PROJECT;
     case AutoLaunch::camera:     return CAMERA_PROJECT;
-    case AutoLaunch::ollama:
-    default:                     return OLLAMA_PROJECT;
+    case AutoLaunch::none:
+    default:                     return "";
+    }
+}
+
+const char *auto_launch_version(AutoLaunch target)
+{
+    switch (target) {
+    case AutoLaunch::thinclient: return THINCLIENT_VERSION;
+    case AutoLaunch::ai_usage:   return AIUSAGE_VERSION;
+    case AutoLaunch::weather:    return WEATHER_VERSION;
+    default:                     return nullptr;
     }
 }
 
 const char *auto_launch_finding_message(AutoLaunch target)
 {
     switch (target) {
-    case AutoLaunch::shell:      return "FINDING SHELL PACKAGE";
+    case AutoLaunch::thinclient: return "FINDING THIN CLIENT PACKAGE";
+    case AutoLaunch::ai_usage:   return "FINDING AI USAGE PACKAGE";
+    case AutoLaunch::weather:    return "FINDING WEATHER PACKAGE";
     case AutoLaunch::fileserver: return "FINDING FILE SERVER PACKAGE";
     case AutoLaunch::htmlviewer: return "FINDING HTML VIEWER PACKAGE";
     case AutoLaunch::camera:     return "FINDING CAMERA PACKAGE";
-    case AutoLaunch::ollama:
-    default:                     return "FINDING OLLAMA PACKAGE";
+    case AutoLaunch::none:
+    default:                     return "FINDING PACKAGE";
     }
 }
 
 const char *auto_launch_checking_message(AutoLaunch target)
 {
     switch (target) {
-    case AutoLaunch::shell:      return "CHECKING SHELL FIRMWARE";
+    case AutoLaunch::thinclient: return "CHECKING THIN CLIENT FIRMWARE";
+    case AutoLaunch::ai_usage:   return "CHECKING AI USAGE FIRMWARE";
+    case AutoLaunch::weather:    return "CHECKING WEATHER FIRMWARE";
     case AutoLaunch::fileserver: return "CHECKING FILE SERVER FIRMWARE";
     case AutoLaunch::htmlviewer: return "CHECKING HTML VIEWER FIRMWARE";
     case AutoLaunch::camera:     return "CHECKING CAMERA FIRMWARE";
-    case AutoLaunch::ollama:
-    default:                     return "CHECKING OLLAMA FIRMWARE";
+    case AutoLaunch::none:
+    default:                     return "CHECKING FIRMWARE";
     }
 }
 
 const char *auto_launch_missing_message(AutoLaunch target)
 {
     switch (target) {
-    case AutoLaunch::shell:      return "TAB5 SHELL PACKAGE NOT FOUND";
+    case AutoLaunch::thinclient: return "THIN CLIENT PACKAGE NOT FOUND";
+    case AutoLaunch::ai_usage:   return "AI USAGE PACKAGE NOT FOUND";
+    case AutoLaunch::weather:    return "TAB5 WEATHER PACKAGE NOT FOUND";
     case AutoLaunch::fileserver: return "TAB5 FILE SERVER PACKAGE NOT FOUND";
     case AutoLaunch::htmlviewer: return "TAB5 HTML VIEWER PACKAGE NOT FOUND";
     case AutoLaunch::camera:     return "TAB5 CAMERA PACKAGE NOT FOUND";
-    case AutoLaunch::ollama:
-    default:                     return "OLLAMA ANALYTICS PACKAGE NOT FOUND";
+    case AutoLaunch::none:
+    default:                     return "PACKAGE NOT FOUND";
     }
 }
 
@@ -179,7 +201,6 @@ int installer_selected = -1;
 bool installer_busy = false;
 bool installer_ready = false;
 bool installer_worker_started = false;
-bool installer_auto_ollama = false;
 unsigned installer_escape = 0;
 int64_t installer_escape_at = 0;
 QueueHandle_t installer_events = nullptr;
@@ -237,6 +258,63 @@ bool portrait() { return (display_rotation & 1U) != 0; }
 int screen_width() { return tab5_display_width(); }
 int screen_height() { return tab5_display_height(); }
 int footer_top() { return screen_height() - 70; }
+
+constexpr int HEADER_TOP = 8;
+constexpr int HEADER_HEIGHT = 62;
+constexpr int TABS_TOP = 78;
+constexpr int TABS_HEIGHT = 54;
+constexpr int BODY_TOP = TABS_TOP + TABS_HEIGHT + 2;
+
+int clock_x() { return portrait() ? 276 : 768; }
+int clock_y() { return HEADER_TOP; }
+int clock_w() { return portrait() ? 172 : 192; }
+int clock_h() { return HEADER_HEIGHT; }
+
+int battery_x() { return portrait() ? 460 : 976; }
+int battery_y() { return HEADER_TOP; }
+int battery_w() { return portrait() ? 236 : 280; }
+int battery_h() { return HEADER_HEIGHT; }
+
+int overlay_x() { return portrait() ? 16 : 20; }
+int overlay_y() { return portrait() ? 142 : 140; }
+int overlay_w() { return portrait() ? 688 : 1240; }
+int overlay_h() { return portrait() ? 1052 : 500; }
+int overlay_close_x() { return portrait() ? 568 : 1112; }
+int overlay_close_y() { return portrait() ? 152 : 150; }
+int overlay_close_w() { return portrait() ? 112 : 120; }
+int overlay_close_h() { return 48; }
+int list_nav_y() { return portrait() ? 214 : 150; }
+int list_nav_h() { return 48; }
+int list_row_y0() { return portrait() ? 278 : 216; }
+
+int find_auto_launch_package(AutoLaunch target)
+{
+    const char *proj = auto_launch_project(target);
+    const char *ver = auto_launch_version(target);
+    if (ver && ver[0]) {
+        for (size_t i = 0; i < installer_catalog.count; ++i) {
+            const auto &pkg = installer_catalog.packages[i];
+            if (std::strcmp(pkg.project, proj) == 0 &&
+                std::strcmp(pkg.version, ver) == 0) {
+                return static_cast<int>(i);
+            }
+        }
+        char combined[TAB5_INSTALLER_PROJECT_NAME_MAX + TAB5_INSTALLER_VERSION_MAX];
+        std::snprintf(combined, sizeof(combined), "%s%s", proj, ver);
+        for (size_t i = 0; i < installer_catalog.count; ++i) {
+            if (std::strcmp(installer_catalog.packages[i].project, combined) == 0) {
+                return static_cast<int>(i);
+            }
+        }
+    }
+    int fallback = -1;
+    for (size_t i = 0; i < installer_catalog.count; ++i) {
+        if (std::strcmp(installer_catalog.packages[i].project, proj) == 0) {
+            fallback = static_cast<int>(i);
+        }
+    }
+    return fallback;
+}
 
 void rect(int x, int y, int w, int h, uint32_t color)
 {
@@ -487,7 +565,7 @@ void progress_bar(int x, int y, int w, int h, unsigned percent, uint32_t color)
 
 void draw_tabs()
 {
-    static const char *labels[] = {"Console", "Shell", "Ollama",
+    static const char *labels[] = {"Console", "Thin Client", "AI Usage",
                                    "Files", "HTML View", "Camera"};
     constexpr int count = sizeof(labels) / sizeof(labels[0]);
     const int width = screen_width();
@@ -501,8 +579,9 @@ void draw_tabs()
                         i == 3 ? GREEN :
                         i == 4 ? BLUE :
                         i == 5 ? PURPLE : theme.border;
-        panel(x, 0, right - x, 54, fill, edge, i == 0 ? 3 : 1);
-        centered(labels[i], (x + right) / 2, 17, cyd_fonts::pixelfont_11x5_thin,
+        panel(x, TABS_TOP, right - x, TABS_HEIGHT, fill, edge, i == 0 ? 3 : 1);
+        centered(labels[i], (x + right) / 2, TABS_TOP + (portrait() ? 22 : 17),
+                 cyd_fonts::pixelfont_11x5_thin,
                  i == 0 ? theme.text :
                  i == 1 ? RED :
                  i == 2 ? ORANGE :
@@ -515,31 +594,34 @@ void draw_tabs()
 
 void draw_clock()
 {
-    const int x = portrait() ? 438 : 1004;
-    const int center = portrait() ? 567 : 1130;
-    panel(x, 64, portrait() ? 258 : 252, 70, theme.surface, BLUE);
+    const int x = clock_x();
+    const int y = clock_y();
+    const int w = clock_w();
+    const int h = clock_h();
+    const int center = x + w / 2;
+    rect(x, y, w, h, theme.bg);
     tab5_clock_time now {};
     if (tab5_rtc_read(&now)) {
         char time[16], date[24];
         std::snprintf(time, sizeof(time), "%02d:%02d:%02d", now.hour, now.minute, now.second);
         std::snprintf(date, sizeof(date), "%02d/%02d/%04d", now.day, now.month, now.year);
-        centered(time, center, 72, cyd_fonts::pixelfont_13x7_semibold, theme.text, 2);
-        centered(date, center, 104, cyd_fonts::pixelfont_7x5_thin, theme.muted, 1);
-        text("RTC", x + (portrait() ? 221 : 213), 118,
-             cyd_fonts::pixelfont_7x5_thin, BLUE, 1);
+        centered(time, center, y + 8, cyd_fonts::pixelfont_13x7_semibold, theme.text, 2);
+        const int date_y = y + 42;
+        centered(date, center - 16, date_y, cyd_fonts::pixelfont_7x5_thin, theme.muted, 1);
+        text("RTC", center + 26, date_y, cyd_fonts::pixelfont_7x5_thin, BLUE, 1);
     } else {
-        centered("RTC ERROR", center, 86, cyd_fonts::pixelfont_11x5_thin, RED, 2);
+        centered("RTC ERROR", center, y + 20, cyd_fonts::pixelfont_11x5_thin, RED, 2);
     }
 }
 
 void draw_header()
 {
-    text("TAB5 Console", 24, 66, cyd_fonts::pixelfont_13x7_semibold,
+    text("TAB5 Console", 24, portrait() ? 12 : 10, cyd_fonts::pixelfont_13x7_semibold,
          theme.text, portrait() ? 2 : 3);
     char detail[80];
     std::snprintf(detail, sizeof(detail), "v%s  -  %s", esp_app_get_description()->version,
                   UPDATE_DESCRIPTION);
-    text(detail, 27, portrait() ? 104 : 112, cyd_fonts::pixelfont_7x5_thin,
+    text(detail, 27, portrait() ? 48 : 55, cyd_fonts::pixelfont_7x5_thin,
          theme.muted, portrait() ? 1 : 2);
 
     draw_clock();
@@ -811,40 +893,44 @@ void draw_discharging(int x, int y)
 
 void draw_battery()
 {
-    const int x = 24;
-    const int y = portrait() ? 710 : 512;
-    const int width = portrait() ? 672 : 464;
-    const int height = portrait() ? 130 : 126;
+    const int x = battery_x();
+    const int y = battery_y();
+    const int width = battery_w();
+    const int height = battery_h();
     panel(x, y, width, height, theme.surface, theme.border);
-    text("Battery", x + 20, y + 14, cyd_fonts::pixelfont_13x7_semibold, theme.text, 2);
-    char value[48];
+    const int label_scale = portrait() ? 1 : 2;
+    const int label_y = portrait() ? y + 12 : y + 8;
+    text("Battery", x + 12, label_y, cyd_fonts::pixelfont_7x5_thin, theme.text, label_scale);
     if (metrics.battery_ready) {
-        std::snprintf(value, sizeof(value), "%u%%  -  %.2f V", metrics.battery_percent,
-                      metrics.battery_voltage);
-        int val_w = text_width(value, cyd_fonts::pixelfont_11x5_thin, 2);
-        int text_x = x + width - 24 - val_w;
-        text(value, text_x, y + 14, cyd_fonts::pixelfont_11x5_thin, theme.text, 2);
-        int icon_x = text_x - 22;
+        char value[32];
+        std::snprintf(value, sizeof(value), "%u%% %.2fV",
+                      metrics.battery_percent, metrics.battery_voltage);
+        int val_w = text_width(value, cyd_fonts::pixelfont_7x5_thin, label_scale);
+        int text_x = x + width - 12 - val_w;
+        text(value, text_x, label_y, cyd_fonts::pixelfont_7x5_thin, theme.text, label_scale);
+        int icon_x = text_x - 18;
         if (metrics.battery_charging) {
-            draw_bolt(icon_x, y + 14);
+            draw_bolt(icon_x, y + 6);
         } else {
-            draw_discharging(icon_x, y + 15);
+            draw_discharging(icon_x, y + 7);
         }
     } else {
-        text("MONITOR UNAVAILABLE", x + 190, y + 14,
-             cyd_fonts::pixelfont_11x5_thin, RED, 2);
+        const char *err = "N/A";
+        int err_w = text_width(err, cyd_fonts::pixelfont_7x5_thin, label_scale);
+        text(err, x + width - 12 - err_w, label_y,
+             cyd_fonts::pixelfont_7x5_thin, RED, label_scale);
     }
 
     int filled = metrics.battery_ready ? std::max(1, (metrics.battery_percent + 19) / 20) : 0;
-    const int segment_gap = 10;
-    const int segment_width = (width - 70 - segment_gap * 4) / 5;
+    const int segment_gap = portrait() ? 4 : 5;
+    const int segment_width = (width - 34 - segment_gap * 4) / 5;
     for (int i = 0; i < 5; ++i) {
         uint32_t color = i < 3 ? GREEN : (i == 3 ? YELLOW : RED);
-        panel(x + 21 + i * (segment_width + segment_gap), y + 54, segment_width, 36,
+        panel(x + 12 + i * (segment_width + segment_gap), y + 32, segment_width, 20,
               i < filled ? color : theme.surface_pressed,
               i < filled ? color : theme.border);
     }
-    rect(x + width - 28, y + 64, 13, 16, theme.muted);
+    rect(x + width - 18, y + 37, 6, 10, theme.muted);
 }
 
 void draw_power_button(int x, int y, int width, int height, Icon which,
@@ -950,8 +1036,8 @@ void draw_footer()
 void draw_ui()
 {
     tab5_display_rect(0, 0, screen_width(), screen_height(), theme.bg);
-    draw_tabs();
     draw_header();
+    draw_tabs();
     draw_controls();
     draw_storage();
     draw_battery_and_power();
@@ -985,18 +1071,18 @@ void draw_install_progress(bool frame)
     const int bottom = footer_top();
     const int center = width / 2;
     if (frame) {
-        rect(0, 54, width, bottom - 54, theme.surface);
-        const int icon_y = portrait() ? 244 : 120;
+        rect(0, BODY_TOP, width, bottom - BODY_TOP, theme.surface);
+        const int icon_y = portrait() ? 244 : 158;
         icon(Icon::sd, center - 20, icon_y, ORANGE, theme.surface);
-        centered("Loading app", center, portrait() ? 316 : 180,
+        centered("Loading app", center, portrait() ? 316 : 214,
                  cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
-        centered(installer_job.project, center, portrait() ? 382 : 244,
+        centered(installer_job.project, center, portrait() ? 382 : 272,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
-        centered("KEEP POWER CONNECTED", center, portrait() ? 1050 : 560,
+        centered("KEEP POWER CONNECTED", center, portrait() ? 1050 : 582,
                  cyd_fonts::pixelfont_7x5_thin, theme.muted, 2);
     }
     const int progress_x = portrait() ? 32 : 76;
-    const int progress_y = portrait() ? 500 : 306;
+    const int progress_y = portrait() ? 500 : 330;
     const int progress_width = portrait() ? 656 : 1128;
     rect(progress_x, progress_y, progress_width, portrait() ? 220 : 210, theme.surface);
     centered(installer_progress.message, center, progress_y + 10,
@@ -1012,8 +1098,8 @@ void draw_install_progress(bool frame)
 void draw_installer_overlay()
 {
     if (installer_busy) { draw_install_progress(true); return; }
-    if ((installer_auto_launch != AutoLaunch::none || installer_auto_ollama) && pending_installer_scan) {
-        const AutoLaunch target = (installer_auto_launch != AutoLaunch::none) ? installer_auto_launch : AutoLaunch::ollama;
+    if (installer_auto_launch != AutoLaunch::none && pending_installer_scan) {
+        const AutoLaunch target = installer_auto_launch;
         const char *proj = auto_launch_project(target);
         const char *finding = auto_launch_finding_message(target);
         std::snprintf(installer_job.project, sizeof(installer_job.project), "%s", proj);
@@ -1026,25 +1112,25 @@ void draw_installer_overlay()
     overlay_frame("SD App Library", !installer_ready ? "Launcher migration required" :
                   metrics.sd_ready ? "Select a package to validate" : "SD not mounted");
     if (!metrics.sd_ready) {
-        centered("NO SD CARD", screen_width() / 2, portrait() ? 500 : 322,
+        centered("NO SD CARD", screen_width() / 2, portrait() ? 500 : 350,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
     } else if (installer_catalog.count == 0) {
         centered("NO PACKAGES - ADD /firmware/*.json", screen_width() / 2,
-                 portrait() ? 500 : 322,
+                 portrait() ? 500 : 350,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
     } else {
         size_t last_page = installer_catalog.count > 5
             ? installer_catalog.count - 5 : 0;
         if (installer_scroll > last_page) installer_scroll = last_page;
-        draw_button(portrait() ? 318 : 862, portrait() ? 150 : 132,
-                    portrait() ? 110 : 116, 50, "UP", installer_scroll > 0);
-        draw_button(portrait() ? 438 : 986, portrait() ? 150 : 132,
-                    portrait() ? 110 : 116, 50, "DOWN", installer_scroll < last_page);
+        draw_button(portrait() ? 318 : 862, list_nav_y(),
+                    portrait() ? 110 : 116, list_nav_h(), "UP", installer_scroll > 0);
+        draw_button(portrait() ? 438 : 986, list_nav_y(),
+                    portrait() ? 110 : 116, list_nav_h(), "DOWN", installer_scroll < last_page);
         size_t shown = installer_catalog.count - installer_scroll;
         if (shown > 5) shown = 5;
         for (size_t i = 0; i < shown; ++i) {
             const auto &pkg = installer_catalog.packages[installer_scroll + i];
-            int y = (portrait() ? 250 : 206) +
+            int y = (portrait() ? 282 : 222) +
                     static_cast<int>(i) * (portrait() ? 130 : 58);
             bool sel = static_cast<int>(installer_scroll + i) == installer_selected;
             panel(portrait() ? 32 : 44, y, portrait() ? 656 : 1132,
@@ -1092,15 +1178,13 @@ void redraw(uint32_t dirty)
         return;
     }
     if (overlay != Overlay::none) {
-        // The overlay owns the region from y=120 to y=640. Do not let periodic
-        // battery/telemetry updates paint hidden base panels over it.
-        dirty &= ~(DIRTY_CONTROLS | DIRTY_STORAGE | DIRTY_BATTERY |
-                   DIRTY_POWER | DIRTY_RESTORE);
+        // The overlay owns the region below the header and tabs. Do not let
+        // periodic body updates paint hidden base panels over it.
+        dirty &= ~(DIRTY_CONTROLS | DIRTY_STORAGE | DIRTY_POWER | DIRTY_RESTORE);
     }
     if (dirty & DIRTY_CLOCK) {
         draw_clock();
-        tab5_display_present_region(portrait() ? 438 : 1004, 64,
-                                    portrait() ? 258 : 252, 70);
+        tab5_display_present_region(clock_x(), clock_y(), clock_w(), clock_h());
     }
     if (dirty & DIRTY_CONTROLS) {
         draw_controls();
@@ -1115,15 +1199,13 @@ void redraw(uint32_t dirty)
     }
     if (dirty & DIRTY_BATTERY) {
         draw_battery();
-        tab5_display_present_region(24, portrait() ? 710 : 512,
-                                    portrait() ? 672 : 464,
-                                    portrait() ? 130 : 126);
+        tab5_display_present_region(battery_x(), battery_y(), battery_w(), battery_h());
     }
     if (dirty & DIRTY_POWER) {
         draw_power_controls();
-        tab5_display_present_region(portrait() ? 24 : 500,
-                                    portrait() ? 852 : 512,
-                                    portrait() ? 672 : 756,
+        tab5_display_present_region(24,
+                                    portrait() ? 710 : 512,
+                                    portrait() ? 672 : 1232,
                                     portrait() ? 212 : 126);
     }
     if (dirty & DIRTY_FOOTER) {
@@ -1135,16 +1217,15 @@ void redraw(uint32_t dirty)
         draw_overlay();
         const bool loading_page = overlay == Overlay::installer &&
                                   (installer_busy ||
-                                   ((installer_auto_launch != AutoLaunch::none || installer_auto_ollama) && pending_installer_scan));
-        tab5_display_present_region(loading_page ? 0 : (portrait() ? 16 : 20),
-                                    loading_page ? 54 : (portrait() ? 70 : 120),
-                                    loading_page ? screen_width() : (portrait() ? 688 : 1240),
-                                    loading_page ? footer_top() - 54 :
-                                                   (portrait() ? 1124 : 520));
+                                   (installer_auto_launch != AutoLaunch::none && pending_installer_scan));
+        tab5_display_present_region(loading_page ? 0 : overlay_x(),
+                                    loading_page ? BODY_TOP : overlay_y(),
+                                    loading_page ? screen_width() : overlay_w(),
+                                    loading_page ? footer_top() - BODY_TOP : overlay_h());
     } else if ((dirty & DIRTY_INSTALLER) && installer_busy) {
         draw_install_progress(false);
         tab5_display_present_region(portrait() ? 32 : 76,
-                                    portrait() ? 500 : 306,
+                                    portrait() ? 500 : 330,
                                     portrait() ? 656 : 1128,
                                     portrait() ? 220 : 210);
     } else if ((dirty & DIRTY_BLE_TEST) && overlay == Overlay::bluetooth &&
@@ -1173,17 +1254,15 @@ void draw_button(int x, int y, int w, int h, const char *label, bool active)
 
 void overlay_frame(const char *title, const char *status, const char *close_label)
 {
+    panel(overlay_x(), overlay_y(), overlay_w(), overlay_h(), theme.surface, BLUE, 3);
     if (portrait()) {
-        panel(16, 70, 688, 1124, theme.surface, BLUE, 3);
-        text(title, 32, 88, cyd_fonts::pixelfont_13x7_semibold, theme.text, 2);
-        text(status, 32, 128, cyd_fonts::pixelfont_7x5_thin, theme.muted, 1);
-        draw_button(568, 82, 112, 52, close_label);
-        return;
+        text(title, 32, 156, cyd_fonts::pixelfont_13x7_semibold, theme.text, 2);
+        text(status, 32, 196, cyd_fonts::pixelfont_7x5_thin, theme.muted, 1);
+    } else {
+        text(title, 44, 154, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
+        text(status, 44, 196, cyd_fonts::pixelfont_7x5_thin, theme.muted, 2);
     }
-    panel(20, 120, 1240, 520, theme.surface, BLUE, 3);
-    text(title, 44, 136, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
-    text(status, 44, 178, cyd_fonts::pixelfont_7x5_thin, theme.muted, 2);
-    draw_button(1112, 132, 120, 50, close_label);
+    draw_button(overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h(), close_label);
 }
 
 const char *safe_wifi_ssid(const tab5_wifi_network_t &network)
@@ -1197,17 +1276,17 @@ void draw_wifi_list()
     size_t last_page = radio_status.wifi_count > 8
         ? ((radio_status.wifi_count - 1) / 8) * 8 : 0;
     if (wifi_scroll > last_page) wifi_scroll = last_page;
-    draw_button(portrait() ? 318 : 862, portrait() ? 150 : 132,
-                portrait() ? 110 : 116, 50, "UP", wifi_scroll > 0);
-    draw_button(portrait() ? 438 : 986, portrait() ? 150 : 132,
-                portrait() ? 110 : 116, 50, "DOWN", wifi_scroll < last_page);
+    draw_button(portrait() ? 318 : 862, list_nav_y(),
+                portrait() ? 110 : 116, list_nav_h(), "UP", wifi_scroll > 0);
+    draw_button(portrait() ? 438 : 986, list_nav_y(),
+                portrait() ? 110 : 116, list_nav_h(), "DOWN", wifi_scroll < last_page);
     if (!radio_status.wifi_enabled) {
         centered("WI-FI IS OFF - TAP TURN ON", screen_width() / 2,
-                 portrait() ? 500 : 322, cyd_fonts::pixelfont_11x5_thin,
+                 portrait() ? 500 : 350, cyd_fonts::pixelfont_11x5_thin,
                  theme.muted, 2);
     } else if (radio_status.wifi_count == 0) {
         centered(radio_status.wifi_scanning ? "SCANNING FOR NETWORKS..." : "NO NETWORKS YET - TAP SCAN",
-                 screen_width() / 2, portrait() ? 500 : 322,
+                 screen_width() / 2, portrait() ? 500 : 350,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
     } else {
         size_t shown = wifi_scroll < radio_status.wifi_count
@@ -1215,7 +1294,7 @@ void draw_wifi_list()
         for (size_t i = 0; i < shown; ++i) {
             tab5_wifi_network_t network {};
             if (!tab5_radio_get_wifi_network(wifi_scroll + i, &network)) continue;
-            int y = (portrait() ? 220 : 206) + static_cast<int>(i) * (portrait() ? 88 : 43);
+            int y = list_row_y0() + static_cast<int>(i) * (portrait() ? 88 : 44);
             panel(portrait() ? 32 : 44, y, portrait() ? 656 : 1132,
                   portrait() ? 72 : 38, theme.surface_pressed, theme.border);
             text(safe_wifi_ssid(network), portrait() ? 48 : 60, y + 10,
@@ -1251,16 +1330,16 @@ void draw_wifi_password()
 {
     overlay_frame("Wi-Fi Password", selected_ssid, "BACK");
     if (portrait()) {
-        panel(32, 190, 656, 70, theme.bg, BLUE);
+        panel(32, 224, 656, 70, theme.bg, BLUE);
         char shown[66] = {0};
         size_t length = std::strlen(wifi_password);
         size_t start = length > 44 ? length - 44 : 0;
         for (size_t i = start; i < length; ++i)
             shown[i - start] = password_visible ? wifi_password[i] : '*';
         if (!shown[0]) std::snprintf(shown, sizeof(shown), "TYPE PASSWORD");
-        text(shown, 48, 214, cyd_fonts::pixelfont_7x5_thin,
+        text(shown, 48, 248, cyd_fonts::pixelfont_7x5_thin,
              wifi_password[0] ? theme.text : theme.disabled, 2);
-        const int rows[] = {300, 374, 448, 522};
+        const int rows[] = {324, 398, 472, 546};
         const char *letters[] = {"1234567890", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"};
         for (int row = 0; row < 3; ++row) {
             int count = row == 2 ? 9 : 10;
@@ -1287,21 +1366,21 @@ void draw_wifi_password()
             draw_password_key(120 + i * 69, rows[3], 63, 60, label);
         }
         draw_password_key(606, rows[3], 90, 60, "DEL");
-        draw_button(24, 620, 300, 60, "SPACE");
-        draw_button(336, 620, 170, 60, password_symbols ? "ABC" : "SYM", password_symbols);
-        draw_button(518, 620, 178, 60, password_visible ? "HIDE" : "SHOW");
-        draw_button(24, 700, 672, 64, "CONNECT", true);
+        draw_button(24, 634, 300, 60, "SPACE");
+        draw_button(336, 634, 170, 60, password_symbols ? "ABC" : "SYM", password_symbols);
+        draw_button(518, 634, 178, 60, password_visible ? "HIDE" : "SHOW");
+        draw_button(24, 714, 672, 64, "CONNECT", true);
         return;
     }
-    panel(60, 205, 1160, 54, theme.bg, BLUE);
+    panel(60, 216, 1160, 50, theme.bg, BLUE);
     char shown[66] = {0};
     size_t length = std::strlen(wifi_password);
     size_t start = length > 48 ? length - 48 : 0;
     for (size_t i = start; i < length; ++i) shown[i - start] = password_visible ? wifi_password[i] : '*';
     if (!shown[0]) std::snprintf(shown, sizeof(shown), "TYPE PASSWORD");
-    text(shown, 76, 226, cyd_fonts::pixelfont_7x5_thin,
+    text(shown, 76, 234, cyd_fonts::pixelfont_7x5_thin,
          wifi_password[0] ? theme.text : theme.disabled, 2);
-    const int y_rows[] = {278, 330, 382, 434};
+    const int y_rows[] = {282, 334, 386, 438};
     if (password_symbols) {
         for (int i = 0; i < 10; ++i) {
             char label[2] = {PASSWORD_SYMBOLS_0[i], 0};
@@ -1338,10 +1417,10 @@ void draw_wifi_password()
         }
     }
     draw_password_key(1050, y_rows[3], 108, 44, "DEL");
-    draw_button(76, 492, 424, 44, "SPACE");
-    draw_button(508, 492, 192, 44, password_symbols ? "ABC" : "SYM", password_symbols);
-    draw_button(708, 492, 224, 44, password_visible ? "HIDE" : "SHOW");
-    draw_button(940, 492, 324, 44, "CONNECT", true);
+    draw_button(76, 496, 424, 44, "SPACE");
+    draw_button(508, 496, 192, 44, password_symbols ? "ABC" : "SYM", password_symbols);
+    draw_button(708, 496, 224, 44, password_visible ? "HIDE" : "SHOW");
+    draw_button(940, 496, 324, 44, "CONNECT", true);
 }
 
 void draw_ble_row(size_t index, int y)
@@ -1464,24 +1543,24 @@ void draw_bluetooth_overlay()
     size_t last_page = radio_status.ble_count > 8
         ? ((radio_status.ble_count - 1) / 8) * 8 : 0;
     if (ble_scroll > last_page) ble_scroll = last_page;
-    draw_button(portrait() ? 318 : 862, portrait() ? 150 : 132,
-                portrait() ? 110 : 116, 50, "UP", ble_scroll > 0);
-    draw_button(portrait() ? 438 : 986, portrait() ? 150 : 132,
-                portrait() ? 110 : 116, 50, "DOWN", ble_scroll < last_page);
+    draw_button(portrait() ? 318 : 862, list_nav_y(),
+                portrait() ? 110 : 116, list_nav_h(), "UP", ble_scroll > 0);
+    draw_button(portrait() ? 438 : 986, list_nav_y(),
+                portrait() ? 110 : 116, list_nav_h(), "DOWN", ble_scroll < last_page);
     if (!radio_status.bluetooth_enabled) {
         centered("BLUETOOTH IS OFF - TAP TURN ON", screen_width() / 2,
-                 portrait() ? 500 : 322,
+                 portrait() ? 500 : 350,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
     } else if (radio_status.ble_count == 0) {
         centered(radio_status.bt_scanning ? "SCANNING FOR BLE DEVICES..." : "NO DEVICES YET - TAP SCAN",
-                 screen_width() / 2, portrait() ? 500 : 322,
+                 screen_width() / 2, portrait() ? 500 : 350,
                  cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
     } else {
         size_t shown = ble_scroll < radio_status.ble_count
             ? std::min<size_t>(8, radio_status.ble_count - ble_scroll) : 0;
         for (size_t i = 0; i < shown; ++i)
-            draw_ble_row(ble_scroll + i, (portrait() ? 220 : 206) +
-                         static_cast<int>(i) * (portrait() ? 88 : 43));
+            draw_ble_row(ble_scroll + i, list_row_y0() +
+                         static_cast<int>(i) * (portrait() ? 88 : 44));
     }
     const int bottom = portrait() ? 1110 : 578;
     draw_button(portrait() ? 24 : 44, bottom, portrait() ? 210 : 350,
@@ -1618,47 +1697,47 @@ void draw_clock_main()
     }
 
     if (portrait()) {
-        panel(32, 170, 656, 170, theme.surface_pressed, BLUE, 2);
-        centered(time_str, 360, 195, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
-        centered(date_str, 360, 275, cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
+        panel(32, 220, 656, 170, theme.surface_pressed, BLUE, 2);
+        centered(time_str, 360, 245, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
+        centered(date_str, 360, 325, cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
 
         char zone_label[40];
         std::snprintf(zone_label, sizeof(zone_label), "ZONE: %s (%s)",
                       CLOCK_ZONES[current_zone].name, CLOCK_ZONES[current_zone].abbr);
-        draw_button(32, 360, 656, 70, zone_label);
+        draw_button(32, 410, 656, 70, zone_label);
 
         char wifi_label[48];
         std::snprintf(wifi_label, sizeof(wifi_label), "WIFI: %s",
                       radio_status.wifi_has_ip ? radio_status.ip_address :
                       radio_status.wifi_enabled ? "NO IP" : "OFF");
-        draw_button(32, 450, 656, 70, wifi_label, false);
+        draw_button(32, 500, 656, 70, wifi_label, false);
 
-        draw_button(32, 540, 656, 80,
+        draw_button(32, 590, 656, 80,
                     clock_sync_in_progress ? "CONTACTING NTP..." : "WI-FI TIME SYNC",
                     !clock_sync_in_progress && radio_status.wifi_has_ip);
 
-        draw_button(32, 640, 656, 80, "SET MANUALLY", !clock_sync_in_progress);
+        draw_button(32, 690, 656, 80, "SET MANUALLY", !clock_sync_in_progress);
     } else {
-        panel(80, 200, 1120, 140, theme.surface_pressed, BLUE, 2);
-        centered(time_str, 640, 218, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
-        centered(date_str, 640, 280, cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
+        panel(80, 216, 1120, 134, theme.surface_pressed, BLUE, 2);
+        centered(time_str, 640, 234, cyd_fonts::pixelfont_13x7_semibold, theme.text, 3);
+        centered(date_str, 640, 294, cyd_fonts::pixelfont_11x5_thin, theme.muted, 2);
 
         char zone_label[40];
         std::snprintf(zone_label, sizeof(zone_label), "ZONE: %s (%s)",
                       CLOCK_ZONES[current_zone].name, CLOCK_ZONES[current_zone].abbr);
-        draw_button(80, 360, 545, 64, zone_label);
+        draw_button(80, 368, 545, 64, zone_label);
 
         char wifi_label[48];
         std::snprintf(wifi_label, sizeof(wifi_label), "WIFI: %s",
                       radio_status.wifi_has_ip ? radio_status.ip_address :
                       radio_status.wifi_enabled ? "ENABLED (NO IP)" : "DISCONNECTED");
-        draw_button(655, 360, 545, 64, wifi_label, false);
+        draw_button(655, 368, 545, 64, wifi_label, false);
 
-        draw_button(80, 450, 545, 74,
+        draw_button(80, 456, 545, 74,
                     clock_sync_in_progress ? "CONTACTING NTP..." : "WI-FI TIME SYNC",
                     !clock_sync_in_progress && radio_status.wifi_has_ip);
 
-        draw_button(655, 450, 545, 74, "SET MANUALLY", !clock_sync_in_progress);
+        draw_button(655, 456, 545, 74, "SET MANUALLY", !clock_sync_in_progress);
     }
 }
 
@@ -1677,7 +1756,7 @@ void draw_clock_edit()
             int col = i / 3;
             int row = i % 3;
             int x = col == 0 ? 32 : 375;
-            int y = 170 + row * 110;
+            int y = 220 + row * 110;
             int w = 313, h = 95;
             bool sel = (static_cast<int>(editing_field) == i);
             panel(x, y, w, h, sel ? theme.surface_pressed : theme.surface,
@@ -1690,21 +1769,21 @@ void draw_clock_edit()
                      sel ? theme.text : theme.muted, 2);
         }
 
-        draw_button(32, 530, 313, 74, "- LOWER");
-        draw_button(375, 530, 313, 74, "+ HIGHER");
+        draw_button(32, 580, 313, 74, "- LOWER");
+        draw_button(375, 580, 313, 74, "+ HIGHER");
 
         char preview[64];
         std::snprintf(preview, sizeof(preview), "PREVIEW: %02d/%02d/%04d %02d:%02d:%02d",
                       editing_time.day, editing_time.month, editing_time.year,
                       editing_time.hour, editing_time.minute, editing_time.second);
-        centered(preview, 360, 630, cyd_fonts::pixelfont_11x5_thin, theme.text, 2);
+        centered(preview, 360, 680, cyd_fonts::pixelfont_11x5_thin, theme.text, 2);
 
-        draw_button(32, 700, 313, 74, "CANCEL");
-        draw_button(375, 700, 313, 74, "SAVE TO RTC");
+        draw_button(32, 750, 313, 74, "CANCEL");
+        draw_button(375, 750, 313, 74, "SAVE TO RTC");
     } else {
         for (int i = 0; i < 6; ++i) {
             int x = 80 + i * 190;
-            int y = 200;
+            int y = 216;
             int w = 170, h = 100;
             bool sel = (static_cast<int>(editing_field) == i);
             panel(x, y, w, h, sel ? theme.surface_pressed : theme.surface,
@@ -1717,17 +1796,17 @@ void draw_clock_edit()
                      sel ? theme.text : theme.muted, 2);
         }
 
-        draw_button(80, 330, 545, 74, "- LOWER");
-        draw_button(655, 330, 545, 74, "+ HIGHER");
+        draw_button(80, 342, 545, 74, "- LOWER");
+        draw_button(655, 342, 545, 74, "+ HIGHER");
 
         char preview[64];
         std::snprintf(preview, sizeof(preview), "PREVIEW: %02d/%02d/%04d  %02d:%02d:%02d",
                       editing_time.day, editing_time.month, editing_time.year,
                       editing_time.hour, editing_time.minute, editing_time.second);
-        centered(preview, 640, 425, cyd_fonts::pixelfont_11x5_thin, theme.text, 2);
+        centered(preview, 640, 432, cyd_fonts::pixelfont_11x5_thin, theme.text, 2);
 
-        draw_button(80, 470, 545, 74, "CANCEL");
-        draw_button(655, 470, 545, 74, "SAVE TO RTC");
+        draw_button(80, 476, 545, 74, "CANCEL");
+        draw_button(655, 476, 545, 74, "SAVE TO RTC");
     }
 }
 
@@ -1753,13 +1832,12 @@ void draw_overlay()
 
 void restore_base_ui()
 {
-    tab5_display_rect(0, 54, screen_width(), footer_top() - 54, theme.bg);
-    draw_header();
+    tab5_display_rect(0, BODY_TOP, screen_width(), footer_top() - BODY_TOP, theme.bg);
     draw_controls();
     draw_storage();
-    draw_battery_and_power();
+    draw_power_controls();
     draw_footer();
-    tab5_display_present_region(0, 54, screen_width(), footer_top() - 54);
+    tab5_display_present_region(0, BODY_TOP, screen_width(), footer_top() - BODY_TOP);
 }
 
 void screen_sleep()
@@ -1794,7 +1872,6 @@ void close_overlay()
     if (installer_busy) return;
     overlay = Overlay::none;
     installer_auto_launch = AutoLaunch::none;
-    installer_auto_ollama = false;
     installer_escape = 0;
     installer_escape_at = 0;
     clock_edit_mode = false;
@@ -1811,10 +1888,12 @@ void close_overlay()
 uint32_t open_installer(AutoLaunch auto_target = AutoLaunch::none)
 {
     if (!metrics.sd_ready) {
-        if (auto_target == AutoLaunch::shell) {
-            set_notice("SHELL PACKAGE NEEDS THE SD CARD", 4);
-        } else if (auto_target == AutoLaunch::ollama) {
-            set_notice("OLLAMA PACKAGE NEEDS THE SD CARD", 4);
+        if (auto_target == AutoLaunch::thinclient) {
+            set_notice("THIN CLIENT NEEDS THE SD CARD", 4);
+        } else if (auto_target == AutoLaunch::ai_usage) {
+            set_notice("AI USAGE NEEDS THE SD CARD", 4);
+        } else if (auto_target == AutoLaunch::weather) {
+            set_notice("WEATHER PACKAGE NEEDS THE SD CARD", 4);
         } else if (auto_target == AutoLaunch::fileserver) {
             set_notice("FILE SERVER NEEDS THE SD CARD", 4);
         } else if (auto_target == AutoLaunch::htmlviewer) {
@@ -1832,7 +1911,6 @@ uint32_t open_installer(AutoLaunch auto_target = AutoLaunch::none)
     }
     overlay = Overlay::installer;
     installer_auto_launch = auto_target;
-    installer_auto_ollama = (auto_target == AutoLaunch::ollama);
     installer_escape = 0;
     installer_escape_at = 0;
     installer_scroll = 0;
@@ -1840,11 +1918,6 @@ uint32_t open_installer(AutoLaunch auto_target = AutoLaunch::none)
     installer_catalog.count = 0;
     pending_installer_scan = true;
     return DIRTY_OVERLAY | DIRTY_FOOTER;
-}
-
-uint32_t open_installer(bool ollama)
-{
-    return open_installer(ollama ? AutoLaunch::ollama : AutoLaunch::none);
 }
 
 void password_append(char c)
@@ -1887,22 +1960,22 @@ void wifi_password_connect()
 uint32_t handle_wifi_password_tap(int x, int y)
 {
     if (portrait()) {
-        if (within(x, y, 568, 82, 112, 52)) {
+        if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
             wifi_password_mode = false;
             password_visible = false;
             password_symbols = false;
             memset(wifi_password, 0, sizeof(wifi_password));
             return DIRTY_OVERLAY | DIRTY_FOOTER;
         }
-        if (within(x, y, 24, 620, 300, 60)) password_append(' ');
-        else if (within(x, y, 336, 620, 170, 60)) password_symbols = !password_symbols;
-        else if (within(x, y, 518, 620, 178, 60)) password_visible = !password_visible;
-        else if (within(x, y, 24, 700, 672, 64)) {
+        if (within(x, y, 24, 634, 300, 60)) password_append(' ');
+        else if (within(x, y, 336, 634, 170, 60)) password_symbols = !password_symbols;
+        else if (within(x, y, 518, 634, 178, 60)) password_visible = !password_visible;
+        else if (within(x, y, 24, 714, 672, 64)) {
             wifi_password_connect();
             return DIRTY_OVERLAY | DIRTY_CONTROLS | DIRTY_FOOTER;
         } else {
             const char *letters[] = {"1234567890", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"};
-            const int rows[] = {300, 374, 448, 522};
+            const int rows[] = {324, 398, 472, 546};
             for (int row = 0; row < 3; ++row) {
                 int count = row == 2 ? 9 : 10;
                 int start_x = row == 2 ? 50 : 16;
@@ -1934,33 +2007,33 @@ uint32_t handle_wifi_password_tap(int x, int y)
         }
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, 1112, 132, 120, 50)) {
+    if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
         wifi_password_mode = false;
         password_visible = false;
         password_symbols = false;
         memset(wifi_password, 0, sizeof(wifi_password));
         return DIRTY_OVERLAY | DIRTY_FOOTER;
     }
-    if (within(x, y, 76, 492, 424, 44)) {
+    if (within(x, y, 76, 496, 424, 44)) {
         password_append(' ');
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, 508, 492, 192, 44)) {
+    if (within(x, y, 508, 496, 192, 44)) {
         password_symbols = !password_symbols;
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, 708, 492, 224, 44)) {
+    if (within(x, y, 708, 496, 224, 44)) {
         password_visible = !password_visible;
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, 940, 492, 324, 44)) {
+    if (within(x, y, 940, 496, 324, 44)) {
         wifi_password_connect();
         return DIRTY_OVERLAY | DIRTY_CONTROLS | DIRTY_FOOTER;
     }
     if (password_symbols) {
         for (int row = 0; row < 3; ++row) {
             for (int i = 0; i < 10; ++i) {
-                if (within(x, y, 64 + i * 116, 278 + row * 52, 108, 44)) {
+                if (within(x, y, 64 + i * 116, 282 + row * 52, 108, 44)) {
                     char c = row == 0 ? PASSWORD_SYMBOLS_0[i] :
                              (row == 1 ? PASSWORD_SYMBOLS_1[i] : PASSWORD_SYMBOLS_2[i]);
                     password_append(c);
@@ -1968,12 +2041,12 @@ uint32_t handle_wifi_password_tap(int x, int y)
                 }
             }
         }
-        if (within(x, y, 122, 434, 108, 44)) {
+        if (within(x, y, 122, 438, 108, 44)) {
             password_symbols = false;
             return DIRTY_OVERLAY;
         }
         for (int i = 0; i < 7; ++i) {
-            if (within(x, y, 238 + i * 116, 434, 108, 44)) {
+            if (within(x, y, 238 + i * 116, 438, 108, 44)) {
                 password_append(PASSWORD_SYMBOLS_3[i]);
                 return DIRTY_OVERLAY;
             }
@@ -1982,7 +2055,7 @@ uint32_t handle_wifi_password_tap(int x, int y)
         const char *rows[] = {"1234567890", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"};
         for (int row = 0; row < 2; ++row) {
             for (int i = 0; i < 10; ++i) {
-                if (within(x, y, 64 + i * 116, 278 + row * 52, 108, 44)) {
+                if (within(x, y, 64 + i * 116, 282 + row * 52, 108, 44)) {
                     char c = rows[row][i];
                     if (!password_shift && c >= 'A' && c <= 'Z') c += 32;
                     password_append(c);
@@ -1991,19 +2064,19 @@ uint32_t handle_wifi_password_tap(int x, int y)
             }
         }
         for (int i = 0; i < 9; ++i) {
-            if (within(x, y, 122 + i * 116, 382, 108, 44)) {
+            if (within(x, y, 122 + i * 116, 386, 108, 44)) {
                 char c = rows[2][i];
                 if (!password_shift) c += 32;
                 password_append(c);
                 return DIRTY_OVERLAY;
             }
         }
-        if (within(x, y, 122, 434, 108, 44)) {
+        if (within(x, y, 122, 438, 108, 44)) {
             password_shift = !password_shift;
             return DIRTY_OVERLAY;
         }
         for (int i = 0; i < 7; ++i) {
-            if (within(x, y, 238 + i * 116, 434, 108, 44)) {
+            if (within(x, y, 238 + i * 116, 438, 108, 44)) {
                 char c = rows[3][i];
                 if (!password_shift) c += 32;
                 password_append(c);
@@ -2011,7 +2084,7 @@ uint32_t handle_wifi_password_tap(int x, int y)
             }
         }
     }
-    if (within(x, y, 1050, 434, 108, 44)) {
+    if (within(x, y, 1050, 438, 108, 44)) {
         password_backspace();
         return DIRTY_OVERLAY;
     }
@@ -2021,18 +2094,17 @@ uint32_t handle_wifi_password_tap(int x, int y)
 uint32_t handle_wifi_tap(int x, int y)
 {
     if (wifi_password_mode) return handle_wifi_password_tap(x, y);
-    if (within(x, y, portrait() ? 568 : 1112, portrait() ? 82 : 132,
-               portrait() ? 112 : 120, portrait() ? 52 : 50)) {
+    if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
         close_overlay();
         return DIRTY_RESTORE;
     }
-    if (within(x, y, portrait() ? 318 : 862, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 318 : 862, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         wifi_scroll = wifi_scroll >= 8 ? wifi_scroll - 8 : 0;
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, portrait() ? 438 : 986, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 438 : 986, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         size_t last_page = radio_status.wifi_count > 8
             ? ((radio_status.wifi_count - 1) / 8) * 8 : 0;
         if (wifi_scroll + 8 <= last_page) wifi_scroll += 8;
@@ -2063,8 +2135,8 @@ uint32_t handle_wifi_tap(int x, int y)
             ? std::min<size_t>(8, radio_status.wifi_count - wifi_scroll) : 0;
         for (size_t i = 0; i < shown; ++i) {
             if (within(x, y, portrait() ? 32 : 44,
-                       (portrait() ? 220 : 206) + static_cast<int>(i) *
-                       (portrait() ? 88 : 43), portrait() ? 656 : 1132,
+                       list_row_y0() + static_cast<int>(i) *
+                       (portrait() ? 88 : 44), portrait() ? 656 : 1132,
                        portrait() ? 72 : 38)) {
                 tab5_wifi_network_t network {};
                 if (!tab5_radio_get_wifi_network(wifi_scroll + i, &network)) break;
@@ -2131,8 +2203,7 @@ uint32_t handle_ble_pair_input_tap(int x, int y)
 
 uint32_t handle_bluetooth_tap(int x, int y)
 {
-    if (within(x, y, portrait() ? 568 : 1112, portrait() ? 82 : 132,
-               portrait() ? 112 : 120, portrait() ? 52 : 50)) {
+    if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
         close_overlay();
         return DIRTY_RESTORE;
     }
@@ -2153,13 +2224,13 @@ uint32_t handle_bluetooth_tap(int x, int y)
         }
         return DIRTY_NONE;
     }
-    if (within(x, y, portrait() ? 318 : 862, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 318 : 862, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         ble_scroll = ble_scroll >= 8 ? ble_scroll - 8 : 0;
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, portrait() ? 438 : 986, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 438 : 986, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         size_t last_page = radio_status.ble_count > 8
             ? ((radio_status.ble_count - 1) / 8) * 8 : 0;
         if (ble_scroll + 8 <= last_page) ble_scroll += 8;
@@ -2190,8 +2261,8 @@ uint32_t handle_bluetooth_tap(int x, int y)
             ? std::min<size_t>(8, radio_status.ble_count - ble_scroll) : 0;
         for (size_t i = 0; i < shown; ++i) {
             if (within(x, y, portrait() ? 32 : 44,
-                       (portrait() ? 220 : 206) + static_cast<int>(i) *
-                       (portrait() ? 88 : 43), portrait() ? 656 : 1132,
+                       list_row_y0() + static_cast<int>(i) *
+                       (portrait() ? 88 : 44), portrait() ? 656 : 1132,
                        portrait() ? 72 : 38)) {
                 tab5_ble_device_t device {};
                 if (tab5_radio_get_ble_device(ble_scroll + i, &device)) {
@@ -2209,20 +2280,18 @@ uint32_t handle_bluetooth_tap(int x, int y)
 uint32_t handle_installer_tap(int x, int y)
 {
     if (installer_busy) return DIRTY_NONE;
-    if (within(x, y, portrait() ? 568 : 1112, portrait() ? 82 : 132,
-               portrait() ? 112 : 120, portrait() ? 52 : 50)) {
+    if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
         installer_auto_launch = AutoLaunch::none;
-        installer_auto_ollama = false;
         close_overlay();
         return DIRTY_RESTORE;
     }
-    if (within(x, y, portrait() ? 318 : 862, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 318 : 862, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         installer_scroll = installer_scroll > 5 ? installer_scroll - 5 : 0;
         return DIRTY_OVERLAY;
     }
-    if (within(x, y, portrait() ? 438 : 986, portrait() ? 150 : 132,
-               portrait() ? 110 : 116, 50)) {
+    if (within(x, y, portrait() ? 438 : 986, list_nav_y(),
+               portrait() ? 110 : 116, list_nav_h())) {
         size_t last_page = installer_catalog.count > 5 ? installer_catalog.count - 5 : 0;
         installer_scroll = std::min(installer_scroll + 5, last_page);
         return DIRTY_OVERLAY;
@@ -2248,7 +2317,7 @@ uint32_t handle_installer_tap(int x, int y)
         if (shown > 5) shown = 5;
         for (size_t i = 0; i < shown; ++i) {
             if (within(x, y, portrait() ? 32 : 44,
-                       (portrait() ? 250 : 206) + static_cast<int>(i) *
+                       (portrait() ? 282 : 222) + static_cast<int>(i) *
                        (portrait() ? 130 : 58), portrait() ? 656 : 1132,
                        portrait() ? 100 : 50)) {
                 installer_selected = static_cast<int>(installer_scroll + i);
@@ -2261,8 +2330,7 @@ uint32_t handle_installer_tap(int x, int y)
 
 uint32_t handle_clock_tap(int x, int y)
 {
-    if (within(x, y, portrait() ? 568 : 1112, portrait() ? 82 : 132,
-               portrait() ? 112 : 120, portrait() ? 52 : 50)) {
+    if (within(x, y, overlay_close_x(), overlay_close_y(), overlay_close_w(), overlay_close_h())) {
         if (clock_edit_mode) {
             clock_edit_mode = false;
             return DIRTY_OVERLAY;
@@ -2277,25 +2345,25 @@ uint32_t handle_clock_tap(int x, int y)
                 int col = i / 3;
                 int row = i % 3;
                 int bx = col == 0 ? 32 : 375;
-                int by = 170 + row * 110;
+                int by = 220 + row * 110;
                 if (within(x, y, bx, by, 313, 95)) {
                     editing_field = static_cast<ClockField>(i);
                     return DIRTY_OVERLAY;
                 }
             }
-            if (within(x, y, 32, 530, 313, 74)) {
+            if (within(x, y, 32, 580, 313, 74)) {
                 adjust_editing_time(editing_field, -1);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 375, 530, 313, 74)) {
+            if (within(x, y, 375, 580, 313, 74)) {
                 adjust_editing_time(editing_field, +1);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 32, 700, 313, 74)) {
+            if (within(x, y, 32, 750, 313, 74)) {
                 clock_edit_mode = false;
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 375, 700, 313, 74)) {
+            if (within(x, y, 375, 750, 313, 74)) {
                 if (tab5_rtc_set(&editing_time)) {
                     std::snprintf(clock_status_message, sizeof(clock_status_message),
                                   "SAVED: %02d/%02d/%04d %02d:%02d:%02d",
@@ -2312,25 +2380,25 @@ uint32_t handle_clock_tap(int x, int y)
         } else {
             for (int i = 0; i < 6; ++i) {
                 int bx = 80 + i * 190;
-                int by = 200;
+                int by = 216;
                 if (within(x, y, bx, by, 170, 100)) {
                     editing_field = static_cast<ClockField>(i);
                     return DIRTY_OVERLAY;
                 }
             }
-            if (within(x, y, 80, 330, 545, 74)) {
+            if (within(x, y, 80, 342, 545, 74)) {
                 adjust_editing_time(editing_field, -1);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 655, 330, 545, 74)) {
+            if (within(x, y, 655, 342, 545, 74)) {
                 adjust_editing_time(editing_field, +1);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 80, 470, 545, 74)) {
+            if (within(x, y, 80, 476, 545, 74)) {
                 clock_edit_mode = false;
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 655, 470, 545, 74)) {
+            if (within(x, y, 655, 476, 545, 74)) {
                 if (tab5_rtc_set(&editing_time)) {
                     std::snprintf(clock_status_message, sizeof(clock_status_message),
                                   "SAVED: %02d/%02d/%04d %02d:%02d:%02d",
@@ -2347,12 +2415,12 @@ uint32_t handle_clock_tap(int x, int y)
         }
     } else {
         if (portrait()) {
-            if (within(x, y, 32, 360, 656, 70)) {
+            if (within(x, y, 32, 410, 656, 70)) {
                 current_zone = (current_zone + 1) % CLOCK_ZONE_COUNT;
                 save_setting("zone", static_cast<uint8_t>(current_zone));
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 32, 540, 656, 80)) {
+            if (within(x, y, 32, 590, 656, 80)) {
                 if (clock_sync_in_progress) return DIRTY_NONE;
                 if (!radio_status.wifi_has_ip) {
                     std::snprintf(clock_status_message, sizeof(clock_status_message),
@@ -2362,7 +2430,7 @@ uint32_t handle_clock_tap(int x, int y)
                 xTaskCreate(clock_sync_worker, "ntp_sync", 4096, nullptr, 2, nullptr);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 32, 640, 656, 80)) {
+            if (within(x, y, 32, 690, 656, 80)) {
                 clock_edit_mode = true;
                 editing_field = ClockField::day;
                 if (!tab5_rtc_read(&editing_time)) {
@@ -2371,12 +2439,12 @@ uint32_t handle_clock_tap(int x, int y)
                 return DIRTY_OVERLAY;
             }
         } else {
-            if (within(x, y, 80, 360, 545, 64)) {
+            if (within(x, y, 80, 368, 545, 64)) {
                 current_zone = (current_zone + 1) % CLOCK_ZONE_COUNT;
                 save_setting("zone", static_cast<uint8_t>(current_zone));
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 80, 450, 545, 74)) {
+            if (within(x, y, 80, 456, 545, 74)) {
                 if (clock_sync_in_progress) return DIRTY_NONE;
                 if (!radio_status.wifi_has_ip) {
                     std::snprintf(clock_status_message, sizeof(clock_status_message),
@@ -2386,7 +2454,7 @@ uint32_t handle_clock_tap(int x, int y)
                 xTaskCreate(clock_sync_worker, "ntp_sync", 4096, nullptr, 2, nullptr);
                 return DIRTY_OVERLAY;
             }
-            if (within(x, y, 655, 450, 545, 74)) {
+            if (within(x, y, 655, 456, 545, 74)) {
                 clock_edit_mode = true;
                 editing_field = ClockField::day;
                 if (!tab5_rtc_read(&editing_time)) {
@@ -2556,19 +2624,17 @@ uint32_t handle_overlay_key(uint8_t key)
 uint32_t handle_tap(int x, int y)
 {
     if (overlay != Overlay::none) return handle_overlay_tap(x, y);
-    if (y < 54) {
+    if (within(x, y, 0, TABS_TOP, screen_width(), TABS_HEIGHT)) {
         int tab = std::min(5, x * 6 / screen_width());
-        if (tab == 1) return open_installer(AutoLaunch::shell);
-        if (tab == 2) return open_installer(true);
+        if (tab == 1) return open_installer(AutoLaunch::thinclient);
+        if (tab == 2) return open_installer(AutoLaunch::ai_usage);
         if (tab == 3) return open_installer(AutoLaunch::fileserver);
         if (tab == 4) return open_installer(AutoLaunch::htmlviewer);
         if (tab == 5) return open_installer(AutoLaunch::camera);
         return DIRTY_NONE;
     }
 
-    const int clock_x = portrait() ? 438 : 1004;
-    const int clock_w = portrait() ? 258 : 252;
-    if (within(x, y, clock_x, 64, clock_w, 70)) {
+    if (within(x, y, clock_x(), clock_y(), clock_w(), clock_h())) {
         overlay = Overlay::clock;
         clock_edit_mode = false;
         clock_status_message[0] = '\0';
@@ -2592,7 +2658,7 @@ uint32_t handle_tap(int x, int y)
         set_notice(dark_mode ? "DARK APPEARANCE" : "LIGHT APPEARANCE", 2);
         return DIRTY_ALL;
     } else if (within(x, y, weather_x, weather_y, card_width, 100)) {
-        return open_installer(false);
+        return open_installer(AutoLaunch::weather);
     } else if (within(x, y, wifi_x, wifi_y, card_width, 100)) {
         if (!radio_ready) {
             set_notice("HOSTED WIFI NOT READY", 3);
@@ -2638,7 +2704,7 @@ uint32_t handle_tap(int x, int y)
         pairing_pin[0] = '\0';
         return DIRTY_OVERLAY | DIRTY_CONTROLS | DIRTY_FOOTER;
     } else if (within(x, y, launch_x, launch_y, portrait() ? 672 : 402, 100)) {
-        return open_installer(false);
+        return open_installer(AutoLaunch::none);
     } else if (within(x, y, ram_x, ram_y, card_width, 100)) {
         refresh_ram();
         return DIRTY_STORAGE | DIRTY_FOOTER;
@@ -2812,26 +2878,22 @@ extern "C" void app_main(void)
             tab5_installer_status_t scan_status{};
             esp_err_t r = tab5_installer_scan(&installer_catalog);
             tab5_installer_get_status(&scan_status);
-            if ((installer_auto_launch != AutoLaunch::none || installer_auto_ollama) && r == ESP_OK) {
-                const AutoLaunch target_mode = (installer_auto_launch != AutoLaunch::none) ? installer_auto_launch : AutoLaunch::ollama;
-                const char *target = auto_launch_project(target_mode);
-                for (size_t i = 0; i < installer_catalog.count; ++i) {
-                    if (std::strcmp(installer_catalog.packages[i].project, target) == 0) {
-                        installer_selected = static_cast<int>(i);
-                        installer_job = installer_catalog.packages[i];
-                        installer_progress.state = TAB5_INSTALLER_VALIDATING;
-                        installer_progress.progress = 0;
-                        std::snprintf(installer_progress.message, sizeof(installer_progress.message), "%s",
-                                      auto_launch_checking_message(target_mode));
-                        installer_busy = true;
-                        installer_worker_started = false;
-                        break;
-                    }
+            if (installer_auto_launch != AutoLaunch::none && r == ESP_OK) {
+                const AutoLaunch target_mode = installer_auto_launch;
+                const int match = find_auto_launch_package(target_mode);
+                if (match >= 0) {
+                    installer_selected = match;
+                    installer_job = installer_catalog.packages[match];
+                    installer_progress.state = TAB5_INSTALLER_VALIDATING;
+                    installer_progress.progress = 0;
+                    std::snprintf(installer_progress.message, sizeof(installer_progress.message), "%s",
+                                  auto_launch_checking_message(target_mode));
+                    installer_busy = true;
+                    installer_worker_started = false;
                 }
                 if (!installer_busy) {
                     const char *missing_msg = auto_launch_missing_message(target_mode);
                     installer_auto_launch = AutoLaunch::none;
-                    installer_auto_ollama = false;
                     set_notice(missing_msg, 6);
                 }
             } else {
@@ -2874,7 +2936,6 @@ extern "C" void app_main(void)
                     installer_busy = false;
                     installer_worker_started = false;
                     installer_auto_launch = AutoLaunch::none;
-                    installer_auto_ollama = false;
                     set_notice(installer_progress.message, 6);
                     dirty |= DIRTY_OVERLAY | DIRTY_FOOTER;
                 }

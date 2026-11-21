@@ -31,7 +31,9 @@ for token in (
 assert "tab5_installer" in CMAKE, "installer component not linked"
 assert "WEATHER TAB IS NOT ACTIVE" not in SOURCE, "old placeholder remains"
 assert "INSERT SD CARD TO LAUNCH" in SOURCE
-assert "OLLAMA PACKAGE NEEDS THE SD CARD" in SOURCE
+assert "THIN CLIENT NEEDS THE SD CARD" in SOURCE
+assert "AI USAGE NEEDS THE SD CARD" in SOURCE
+assert "WEATHER PACKAGE NEEDS THE SD CARD" in SOURCE
 assert "SD APPS FOUND" in SOURCE
 assert "NO PACKAGES - ADD /firmware/*.json" in SOURCE
 assert '"INSTALL + RUN"' in SOURCE
@@ -52,7 +54,9 @@ assert "draw_tabs" in SOURCE
 assert "panel(439, 374, 402, 100" in SOURCE, "RAM panel not compact/readable"
 
 assert "const int x = portrait() ? 24 : 854" in SOURCE, "responsive launch card missing"
-assert 'OLLAMA_PROJECT = "Tab5OllamaAnalytics"' in SOURCE
+assert 'THINCLIENT_PROJECT = "Tab5ThinClient"' in SOURCE
+assert 'AIUSAGE_PROJECT = "Tab5AIUsage"' in SOURCE
+assert 'WEATHER_PROJECT = "Tab5Weather"' in SOURCE
 assert "text(\"Storage\"" in SOURCE, "storage readout text missing"
 assert "text(\"RAM\"" in SOURCE, "RAM readout text missing"
 print("PASS: TAB5 Console installer UI contract")

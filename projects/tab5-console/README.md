@@ -1,9 +1,17 @@
 # TAB5 Console
 
-Console 0.3.7 is the current resident release. It replaces the disabled
-**Network** tab with a purple **Camera** one-tap auto-launcher for `Tab5Camera`,
-increases the SD App Library capacity from 8 to 32 packages, sorts packages by
-project name and version, and skips macOS `._*` metadata files. See the
+Console 0.3.8 is the current resident release. It renames the red **Shell** tab
+to **Thin Client** (`Tab5ThinClient` `0.1.3-dev`), renames the amber **Ollama**
+tab to **AI Usage** (`Tab5AIUsage` `0.2.2`), auto-launches `Tab5Weather` `0.1.2`
+when tapping the **Weather** card, moves the tab bar below the `TAB5 Console`
+header, removes the border box around the clock while keeping its Clock & Date
+Settings tap action, and moves a compact Battery tile into the top-right header
+beside the clock. See the [0.3.8 checkpoint](../../docs/TAB5_CONSOLE_0.3.8.md).
+
+Console 0.3.7 replaced the disabled **Network** tab with a purple **Camera**
+one-tap auto-launcher for `Tab5Camera`, increased the SD App Library capacity
+from 8 to 32 packages, sorted packages by project name and version, and skipped
+macOS `._*` metadata files. See the
 [0.3.7 checkpoint](../../docs/TAB5_CONSOLE_0.3.7.md).
 
 Console 0.3.6 added the red **Shell** launcher and retained green **Files** and
